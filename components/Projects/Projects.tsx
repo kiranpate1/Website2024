@@ -1,13 +1,31 @@
+
+
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 
 type ProjectsProps = {};
 
 const Projects = (props: ProjectsProps) => {
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    cursorX.set(event.clientX);
+    cursorY.set(event.clientY);
+  };
+
   return (
     <div>
-      <h1>Hello & welcome</h1>
+      <motion.h1
+        style={{
+          position: "absolute",
+          top: cursorY.get(),
+          left: cursorX.get(),
+        }}
+      >
+        Hello & welcome
+      </motion.h1>
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
         <div className="relative w-[600px] h-[400px] border-white border-2">
           <svg
