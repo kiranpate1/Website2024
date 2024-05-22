@@ -8,6 +8,7 @@ const Projects = (props: ProjectsProps) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [normalizedPosition, setNormalizedPosition] = useState({ x: 0, y: 0 });
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
+  const height = 400;
 
   const handleMouseMove = (event: { clientX: number; clientY: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
@@ -24,7 +25,7 @@ const Projects = (props: ProjectsProps) => {
     // Normalize the cursor position
     setNormalizedPosition({
       x: x / width,
-      y: y / height,
+      y: 1,
     });
   };
 
@@ -33,7 +34,10 @@ const Projects = (props: ProjectsProps) => {
   };
 
   const handleMouseLeave = () => {
-    // Code to execute when the mouse leaves the div element
+    setNormalizedPosition({
+      x: 1,
+      y: 0,
+    });
   };
 
   const scaleY1 = useTransform(
@@ -42,18 +46,34 @@ const Projects = (props: ProjectsProps) => {
   );
   const scaleY2 = useTransform(
     motionValue(normalizedPosition.y),
-    (latest: number) => latest * 1
+    (latest: number) => 1 - latest
+  );
+  const scaleX1 = useTransform(
+    motionValue(normalizedPosition.x),
+    (latest: number) => latest * 2
+  );
+  const scaleX2 = useTransform(
+    motionValue(normalizedPosition.x),
+    (latest: number) => 2 - latest * 2
   );
 
   const y1 = useSpring(scaleY1, {
     stiffness: 400,
     damping: 100,
-    // mass: item.desktopWidth * 0.05,
+    // mass: 50,
   });
   const y2 = useSpring(scaleY2, {
     stiffness: 400,
     damping: 100,
-    // mass: item.desktopWidth * 0.05,
+  });
+
+  const x1 = useSpring(scaleX1, {
+    stiffness: 400,
+    damping: 100,
+  });
+  const x2 = useSpring(scaleX2, {
+    stiffness: 400,
+    damping: 100,
   });
 
   return (
@@ -61,40 +81,52 @@ const Projects = (props: ProjectsProps) => {
       <h1>Hello & welcome</h1>
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
         <div
-          className="relative w-[600px] h-[400px] border-white border-2"
+          className="relative w-[600px] border-white border-2"
           ref={divRef}
+          style={{ height: height }}
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div className="absolute flex flex-col top-0 left-0 w-full h-full">
-            <div className="w-full h-full bg-white" />
-            <div className="flex">
+            <motion.div
+              className="w-full bg-white origin-top"
+              style={{
+                minHeight: height,
+                scaleY: y1,
+              }}
+            />
+            <motion.div
+              className="flex origin-top"
+              style={{
+                scaleY: y2,
+              }}
+            >
               <motion.svg
-                className="w-full scale-x-[-1]"
+                className="min-w-[300px] scale-x-[-1] origin-top-left"
                 viewBox="0 0 383 108"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
+                  scaleX: x1,
                   scaleY: y1,
-                  scaleX: -1,
                 }}
               >
-                <path d="M383 0C225 0 155 107.5 0 107.5V0H383Z" fill="white" />
+                <path d="M0 0C158 0 228 107.5 383 107.5V0H0Z" fill="white" />
               </motion.svg>
               <motion.svg
-                className="w-full"
+                className="min-w-[300px] origin-top-right"
                 viewBox="0 0 383 108"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                  scaleY: y2,
-                  scaleX: 1,
+                  scaleX: x2,
+                  scaleY: y1,
                 }}
               >
                 <path d="M383 0C225 0 155 107.5 0 107.5V0H383Z" fill="white" />
               </motion.svg>
-            </div>
+            </motion.div>
           </div>
           {/* <Test
             pointerOffsetPercent={pointerOffsetPercent}
