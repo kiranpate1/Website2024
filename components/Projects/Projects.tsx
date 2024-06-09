@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
+import Corners from "../Corners/Corners";
 
 type ProjectsProps = {};
 
@@ -8,7 +9,9 @@ const Projects = (props: ProjectsProps) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [normalizedPosition, setNormalizedPosition] = useState({ x: 0, y: 0 });
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
+  const width = 600;
   const height = 400;
+  const title = "Toronto Tech Week";
 
   const handleMouseMove = (event: { clientX: number; clientY: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
@@ -30,12 +33,15 @@ const Projects = (props: ProjectsProps) => {
   };
 
   const handleMouseEnter = () => {
-    // Code to execute when the mouse enters the div element
+    setNormalizedPosition({
+      x: 0.5,
+      y: 1,
+    });
   };
 
   const handleMouseLeave = () => {
     setNormalizedPosition({
-      x: 1,
+      x: 0.5,
       y: 0,
     });
   };
@@ -58,13 +64,15 @@ const Projects = (props: ProjectsProps) => {
   );
 
   const y1 = useSpring(scaleY1, {
-    stiffness: 400,
-    damping: 100,
+    stiffness: 300,
+    damping: 50,
     // mass: 50,
   });
+
   const y2 = useSpring(scaleY2, {
-    stiffness: 400,
-    damping: 100,
+    stiffness: 100,
+    damping: 50,
+    // mass: 50,
   });
 
   const x1 = useSpring(scaleX1, {
@@ -80,66 +88,84 @@ const Projects = (props: ProjectsProps) => {
     <div>
       <h1>Hello & welcome</h1>
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-        <div
-          className="relative w-[600px] border-white border-2"
-          ref={divRef}
-          style={{ height: height }}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="absolute flex flex-col top-0 left-0 w-full h-full">
+        <div className="relative" style={{ width: width }}>
+          <div
+            className="relative w-full overflow-hidden"
+            ref={divRef}
+            style={{ height: height }}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Corners />
             <motion.div
-              className="w-full bg-white origin-top"
+              className="absolute flex flex-col top-0 left-0 w-full h-full origin-top mix-blend-difference"
               style={{
-                minHeight: height,
                 scaleY: y1,
               }}
-            />
-            <motion.div
-              className="flex origin-top"
-              style={{
-                scaleY: y2,
-              }}
             >
-              <motion.svg
-                className="min-w-[300px] scale-x-[-1] origin-top-left"
-                viewBox="0 0 383 108"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                className="w-full bg-white origin-top"
                 style={{
-                  scaleX: x1,
-                  scaleY: y1,
+                  minHeight: height,
                 }}
+              />
+              <motion.div
+                className="flex origin-top h-[85px]"
+                style={
+                  {
+                    // scaleY: y2,
+                  }
+                }
               >
-                <path d="M0 0C158 0 228 107.5 383 107.5V0H0Z" fill="white" />
-              </motion.svg>
-              <motion.svg
-                className="min-w-[300px] origin-top-right"
-                viewBox="0 0 383 108"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  scaleX: x2,
-                  scaleY: y1,
-                }}
-              >
-                <path d="M383 0C225 0 155 107.5 0 107.5V0H383Z" fill="white" />
-              </motion.svg>
+                <motion.svg
+                  className="scale-x-[-1] origin-top-left"
+                  viewBox="0 0 383 108"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    minWidth: width / 2,
+                    scaleX: x1,
+                    // scaleY: y1,
+                  }}
+                >
+                  <path d="M0 0C158 0 228 107.5 383 107.5V0H0Z" fill="white" />
+                </motion.svg>
+                <motion.svg
+                  className="origin-top-right"
+                  viewBox="0 0 383 108"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    minWidth: width / 2,
+                    scaleX: x2,
+                    // scaleY: y1,
+                  }}
+                >
+                  <path
+                    d="M383 0C225 0 155 107.5 0 107.5V0H383Z"
+                    fill="white"
+                  />
+                </motion.svg>
+              </motion.div>
             </motion.div>
-          </div>
-          {/* <Test
+            {/* <Test
             pointerOffsetPercent={pointerOffsetPercent}
             isMouseInSection={isHovering}
           /> */}
-          <div className="absolute top-0 left-0 w-full h-full z-[-1]">
-            <Image
-              src="/projects/thumbnail-1.png"
-              alt="test"
-              width={200}
-              height={200}
-              className="w-full h-full object-cover"
-            />
+            <div className="absolute top-0 left-0 w-full h-full z-[-1]">
+              <Image
+                src="/projects/thumbnail-1.png"
+                alt="test"
+                width={200}
+                height={200}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center">
+            <h2 className="text-4xl text-white">{title}</h2>
           </div>
         </div>
       </div>
