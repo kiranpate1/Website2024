@@ -2,6 +2,7 @@ import React, { MutableRefObject, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 import Corners from "../Corners/Corners";
+import { sin } from "mathjs";
 
 type ProjectsProps = {};
 
@@ -9,9 +10,31 @@ const Projects = (props: ProjectsProps) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [normalizedPosition, setNormalizedPosition] = useState({ x: 0, y: 0 });
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
+  const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = 600;
   const height = 400;
-  const title = "Toronto Tech Week";
+  const title = "torontotechweek2024.com";
+  const titleArray = title.split("");
+
+  const [letterTransitions, setLetterTransitions] = useState(
+    titleArray.map((letter) => ({
+      letter,
+      translateY: 0,
+    }))
+  );
+
+  const calculateLetterPosition = (index: number) => {
+    if (!divRef.current || !titleRef.current)
+      return { letter: "", position: { xRatio: 0 } };
+    const divRect = divRef.current.getBoundingClientRect();
+    const letterElement = titleRef.current.children[index];
+    if (!letterElement) return { letter: "", position: { xRatio: 0 } };
+    const letterRect = letterElement.getBoundingClientRect();
+    const letterLeft = letterRect.left;
+    const x = letterLeft - divRect.left;
+    const xRatio = x / divRect.width;
+    return { letter: titleArray[index], position: { xRatio } };
+  };
 
   const handleMouseMove = (event: { clientX: number; clientY: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
@@ -20,12 +43,26 @@ const Projects = (props: ProjectsProps) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     const width = rect.width;
-    const height = rect.height;
+    const xRatio = x / width;
 
-    // Update the cursor position
+    setLetterTransitions((prev) => {
+      return prev.map((item, i) => {
+        const {
+          letter: letterValue,
+          position: { xRatio: letterX },
+        } = calculateLetterPosition(i);
+        const distance =
+          letterX !== undefined ? 1 - Math.abs(letterX - xRatio) : 0;
+        const translateY = distance * Math.PI - Math.PI / 2;
+        return {
+          letter: letterValue,
+          translateY,
+        };
+      });
+    });
+
     setCursorPosition({ x, y });
 
-    // Normalize the cursor position
     setNormalizedPosition({
       x: x / width,
       y: 1,
@@ -111,7 +148,7 @@ const Projects = (props: ProjectsProps) => {
                 }}
               />
               <motion.div
-                className="flex origin-top h-[85px]"
+                className="flex origin-top items-center justify-center"
                 style={
                   {
                     // scaleY: y2,
@@ -124,7 +161,7 @@ const Projects = (props: ProjectsProps) => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   style={{
-                    minWidth: width / 2,
+                    minWidth: width / 1.5,
                     scaleX: x1,
                     // scaleY: y1,
                   }}
@@ -137,7 +174,7 @@ const Projects = (props: ProjectsProps) => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   style={{
-                    minWidth: width / 2,
+                    minWidth: width / 1.5,
                     scaleX: x2,
                     // scaleY: y1,
                   }}
@@ -164,8 +201,35 @@ const Projects = (props: ProjectsProps) => {
             </div>
           </div>
 
-          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center">
-            <h2 className="text-4xl text-white">{title}</h2>
+          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center -z-[2]">
+            <div
+              className="relative flex justify-center items-center"
+              ref={titleRef}
+            >
+              {titleArray.map((letter, index) => {
+                const motionTranslateY = useTransform(
+                  motionValue(letterTransitions[index].translateY),
+                  (latest: number) => Math.sin(latest) * 50
+                );
+                const springTranslateY = useSpring(motionTranslateY, {
+                  stiffness: 300,
+                  damping: 50,
+                });
+
+                return (
+                  <motion.div
+                    key={index}
+                    className="text-white font-sans-md"
+                    style={{
+                      marginLeft: "-0.03%",
+                      translateY: springTranslateY,
+                    }}
+                  >
+                    {letter}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
