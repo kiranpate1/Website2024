@@ -18,8 +18,8 @@ const Projects = (props: ProjectsProps) => {
 
   const [letterTransitions, setLetterTransitions] = useState(
     titleArray.map((letter) => ({
-      letter,
       translateY: 0,
+      skewY: 0,
     }))
   );
 
@@ -43,29 +43,33 @@ const Projects = (props: ProjectsProps) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     const width = rect.width;
-    const xRatio = x / width;
-
-    setLetterTransitions((prev) => {
-      return prev.map((item, i) => {
-        const {
-          letter: letterValue,
-          position: { xRatio: letterX },
-        } = calculateLetterPosition(i);
-        const distance =
-          letterX !== undefined ? 1 - Math.abs(letterX - xRatio) : 0;
-        const translateY = distance * Math.PI - Math.PI / 2;
-        return {
-          letter: letterValue,
-          translateY,
-        };
-      });
-    });
+    const xDivRatio = x / width;
 
     setCursorPosition({ x, y });
 
     setNormalizedPosition({
       x: x / width,
       y: 1,
+    });
+
+    setLetterTransitions((prev) => {
+      return prev.map((item, i) => {
+        const {
+          position: { xRatio: xLetterRatio },
+        } = calculateLetterPosition(i);
+        const translateDist =
+          xLetterRatio !== undefined
+            ? 1 - Math.abs(xLetterRatio - xDivRatio)
+            : 0;
+        const skewDist =
+          xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
+        const translateY = translateDist * Math.PI - Math.PI / 2;
+        const skewY = -skewDist * Math.PI + Math.PI;
+        return {
+          translateY,
+          skewY,
+        };
+      });
     });
   };
 
@@ -74,12 +78,30 @@ const Projects = (props: ProjectsProps) => {
       x: 0.5,
       y: 1,
     });
+
+    // setLetterTransitions((prev) => {
+    //   return prev.map((item) => {
+    //     return {
+    //       translateY: 1,
+    //       skewY: 1,
+    //     };
+    //   });
+    // });
   };
 
   const handleMouseLeave = () => {
     setNormalizedPosition({
       x: 0.5,
       y: 0,
+    });
+
+    setLetterTransitions((prev) => {
+      return prev.map((item) => {
+        return {
+          translateY: 0,
+          skewY: 0,
+        };
+      });
     });
   };
 
@@ -203,15 +225,24 @@ const Projects = (props: ProjectsProps) => {
 
           <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center -z-[2]">
             <div
-              className="relative flex justify-center items-center"
+              className="relative flex justify-center items-center translate-y-[-100%]"
               ref={titleRef}
             >
               {titleArray.map((letter, index) => {
                 const motionTranslateY = useTransform(
                   motionValue(letterTransitions[index].translateY),
-                  (latest: number) => Math.sin(latest) * 50
+                  (latest: number) => Math.sin(latest) * 100
                 );
                 const springTranslateY = useSpring(motionTranslateY, {
+                  stiffness: 300,
+                  damping: 50,
+                });
+
+                const motionSkewY = useTransform(
+                  motionValue(letterTransitions[index].skewY),
+                  (latest: number) => Math.sin(latest) * 25
+                );
+                const springSkewY = useSpring(motionSkewY, {
                   stiffness: 300,
                   damping: 50,
                 });
@@ -223,6 +254,7 @@ const Projects = (props: ProjectsProps) => {
                     style={{
                       marginLeft: "-0.03%",
                       translateY: springTranslateY,
+                      skewY: springSkewY,
                     }}
                   >
                     {letter}
