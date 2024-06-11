@@ -7,8 +7,8 @@ import { sin } from "mathjs";
 type ProjectsProps = {};
 
 const Projects = (props: ProjectsProps) => {
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [normalizedPosition, setNormalizedPosition] = useState({ x: 0, y: 0 });
+  const mainRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = 600;
@@ -22,6 +22,7 @@ const Projects = (props: ProjectsProps) => {
       skewY: 0,
     }))
   );
+  const [titlePosition, setTitlePosition] = useState(-250);
 
   const calculateLetterPosition = (index: number) => {
     if (!divRef.current || !titleRef.current)
@@ -36,7 +37,7 @@ const Projects = (props: ProjectsProps) => {
     return { letter: titleArray[index], position: { xRatio } };
   };
 
-  const handleMouseMove = (event: { clientX: number; clientY: number }) => {
+  const mainMove = (event: { clientX: number; clientY: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
     if (!rect) return; // Add null check
 
@@ -45,12 +46,12 @@ const Projects = (props: ProjectsProps) => {
     const width = rect.width;
     const xDivRatio = x / width;
 
-    setCursorPosition({ x, y });
-
     setNormalizedPosition({
       x: x / width,
-      y: 1,
+      y: 0,
     });
+
+    setTitlePosition(-250);
 
     setLetterTransitions((prev) => {
       return prev.map((item, i) => {
@@ -63,8 +64,8 @@ const Projects = (props: ProjectsProps) => {
             : 0;
         const skewDist =
           xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
-        const translateY = translateDist * Math.PI - Math.PI / 2;
-        const skewY = -skewDist * Math.PI + Math.PI;
+        const translateY = translateDist * Math.PI * 1.5 - Math.PI;
+        const skewY = -skewDist * Math.PI * 1.5 + Math.PI;
         return {
           translateY,
           skewY,
@@ -73,32 +74,25 @@ const Projects = (props: ProjectsProps) => {
     });
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseMove = (event: { clientX: number; clientY: number }) => {
+    const rect = divRef.current?.getBoundingClientRect();
+    if (!rect) return; // Add null check
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const width = rect.width;
+
     setNormalizedPosition({
-      x: 0.5,
+      x: x / width,
       y: 1,
     });
 
-    // setLetterTransitions((prev) => {
-    //   return prev.map((item) => {
-    //     return {
-    //       translateY: 1,
-    //       skewY: 1,
-    //     };
-    //   });
-    // });
-  };
-
-  const handleMouseLeave = () => {
-    setNormalizedPosition({
-      x: 0.5,
-      y: 0,
-    });
+    setTitlePosition(-130);
 
     setLetterTransitions((prev) => {
       return prev.map((item) => {
         return {
-          translateY: 0,
+          translateY: 1,
           skewY: 0,
         };
       });
@@ -109,10 +103,6 @@ const Projects = (props: ProjectsProps) => {
     motionValue(normalizedPosition.y),
     (latest: number) => latest * 1
   );
-  const scaleY2 = useTransform(
-    motionValue(normalizedPosition.y),
-    (latest: number) => 1 - latest
-  );
   const scaleX1 = useTransform(
     motionValue(normalizedPosition.x),
     (latest: number) => latest * 2
@@ -121,19 +111,15 @@ const Projects = (props: ProjectsProps) => {
     motionValue(normalizedPosition.x),
     (latest: number) => 2 - latest * 2
   );
+  const titleY1 = useTransform(
+    motionValue(titlePosition),
+    (latest: number) => latest
+  );
 
   const y1 = useSpring(scaleY1, {
     stiffness: 300,
     damping: 50,
-    // mass: 50,
   });
-
-  const y2 = useSpring(scaleY2, {
-    stiffness: 100,
-    damping: 50,
-    // mass: 50,
-  });
-
   const x1 = useSpring(scaleX1, {
     stiffness: 400,
     damping: 100,
@@ -142,19 +128,27 @@ const Projects = (props: ProjectsProps) => {
     stiffness: 400,
     damping: 100,
   });
+  const titleY = useSpring(titleY1, {
+    stiffness: 400,
+    damping: 100,
+  });
 
   return (
     <div>
-      <h1>Hello & welcome</h1>
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+        <div
+          className="absolute top-0 left-0 w-full h-full"
+          ref={mainRef}
+          onMouseMove={mainMove}
+        />
         <div className="relative" style={{ width: width }}>
           <div
             className="relative w-full overflow-hidden z-[1]"
             ref={divRef}
             style={{ height: height }}
             onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            // onMouseEnter={handleMouseEnter}
+            // onMouseLeave={handleMouseLeave}
           >
             <Corners />
             <motion.div
@@ -183,7 +177,7 @@ const Projects = (props: ProjectsProps) => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   style={{
-                    minWidth: width / 1.5,
+                    minWidth: width / 1.2,
                     scaleX: x1,
                     // scaleY: y1,
                   }}
@@ -196,7 +190,7 @@ const Projects = (props: ProjectsProps) => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   style={{
-                    minWidth: width / 1.5,
+                    minWidth: width / 1.2,
                     scaleX: x2,
                     // scaleY: y1,
                   }}
@@ -208,10 +202,6 @@ const Projects = (props: ProjectsProps) => {
                 </motion.svg>
               </motion.div>
             </motion.div>
-            {/* <Test
-            pointerOffsetPercent={pointerOffsetPercent}
-            isMouseInSection={isHovering}
-          /> */}
             <div className="absolute top-0 left-0 w-full h-full z-[-1]">
               <Image
                 src="/projects/thumbnail-1.png"
@@ -223,44 +213,47 @@ const Projects = (props: ProjectsProps) => {
             </div>
           </div>
 
-          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center z-0">
-            <div
-              className="relative flex justify-center items-center translate-y-[-100%]"
-              ref={titleRef}
-            >
-              {titleArray.map((letter, index) => {
-                const motionTranslateY = useTransform(
-                  motionValue(letterTransitions[index].translateY),
-                  (latest: number) => Math.sin(latest) * 100
-                );
-                const springTranslateY = useSpring(motionTranslateY, {
-                  stiffness: 300,
-                  damping: 50,
-                });
+          <div className="absolute h-0 w-full bottom-0 left-0 flex items-start justify-center z-0">
+            <div className="relative h-20 w-full overflow-hidden">
+              <motion.div
+                className="relative flex justify-center items-center"
+                ref={titleRef}
+                style={{ y: titleY }}
+              >
+                {titleArray.map((letter, index) => {
+                  const motionTranslateY = useTransform(
+                    motionValue(letterTransitions[index].translateY),
+                    (latest: number) => Math.sin(latest) * 200
+                  );
+                  const springTranslateY = useSpring(motionTranslateY, {
+                    stiffness: 400,
+                    damping: 100,
+                  });
 
-                const motionSkewY = useTransform(
-                  motionValue(letterTransitions[index].skewY),
-                  (latest: number) => Math.sin(latest) * 27
-                );
-                const springSkewY = useSpring(motionSkewY, {
-                  stiffness: 300,
-                  damping: 50,
-                });
+                  const motionSkewY = useTransform(
+                    motionValue(letterTransitions[index].skewY),
+                    (latest: number) => Math.sin(latest) * 60
+                  );
+                  const springSkewY = useSpring(motionSkewY, {
+                    stiffness: 400,
+                    damping: 100,
+                  });
 
-                return (
-                  <motion.div
-                    key={index}
-                    className="text-white font-sans-md"
-                    style={{
-                      marginLeft: "-0.03%",
-                      translateY: springTranslateY,
-                      skewY: springSkewY,
-                    }}
-                  >
-                    {letter}
-                  </motion.div>
-                );
-              })}
+                  return (
+                    <motion.div
+                      key={index}
+                      className="text-white font-sans-md origin-bottom-left"
+                      style={{
+                        marginLeft: "-0.03%",
+                        y: springTranslateY,
+                        skewY: springSkewY,
+                      }}
+                    >
+                      {letter}
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
             </div>
           </div>
         </div>
