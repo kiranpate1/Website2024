@@ -149,7 +149,7 @@ const Projects = (props: ProjectsProps) => {
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
         <div className="relative" style={{ width: width }}>
           <div
-            className="relative w-full overflow-hidden"
+            className="relative w-full overflow-hidden z-[1]"
             ref={divRef}
             style={{ height: height }}
             onMouseMove={handleMouseMove}
@@ -223,7 +223,7 @@ const Projects = (props: ProjectsProps) => {
             </div>
           </div>
 
-          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center -z-[2]">
+          <div className="absolute h-0 pt-6 w-full bottom-0 left-0 flex items-start justify-center z-0">
             <div
               className="relative flex justify-center items-center translate-y-[-100%]"
               ref={titleRef}
@@ -240,7 +240,7 @@ const Projects = (props: ProjectsProps) => {
 
                 const motionSkewY = useTransform(
                   motionValue(letterTransitions[index].skewY),
-                  (latest: number) => Math.sin(latest) * 25
+                  (latest: number) => Math.sin(latest) * 27
                 );
                 const springSkewY = useSpring(motionSkewY, {
                   stiffness: 300,
