@@ -8,7 +8,6 @@ type ProjectsProps = {};
 
 const Projects = (props: ProjectsProps) => {
   const [normalizedPosition, setNormalizedPosition] = useState({ x: 0, y: 0 });
-  const mainRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = 600;
@@ -138,7 +137,6 @@ const Projects = (props: ProjectsProps) => {
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
         <div
           className="absolute top-0 left-0 w-full h-full"
-          ref={mainRef}
           onMouseMove={mainMove}
         />
         <div className="relative" style={{ width: width }}>
@@ -182,7 +180,10 @@ const Projects = (props: ProjectsProps) => {
                     // scaleY: y1,
                   }}
                 >
-                  <path d="M0 0C158 0 228 107.5 383 107.5V0H0Z" fill="white" />
+                  <path
+                    d="M0 80C180.5 -114.5 258 107.5 383 107.5V0H0V80Z"
+                    fill="white"
+                  />
                 </motion.svg>
                 <motion.svg
                   className="origin-top-right"
@@ -196,7 +197,7 @@ const Projects = (props: ProjectsProps) => {
                   }}
                 >
                   <path
-                    d="M383 0C225 0 155 107.5 0 107.5V0H383Z"
+                    d="M383 80C202.5 -114.5 125 107.5 0 107.5V0H383V80Z"
                     fill="white"
                   />
                 </motion.svg>
