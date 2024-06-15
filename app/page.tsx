@@ -1,12 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Projects from "../components/Projects/Projects";
+import ProjectsWrapper from "../components/Projects/ProjectsWrapper";
+import { ReactLenis } from "@studio-freight/react-lenis";
 
 export default function Home() {
   return (
+    // <ReactLenis root options={{ lerp: 1, duration: 1 }}>
     <main>
-      <Projects />
+      <ProjectsWrapper />
     </main>
+    // </ReactLenis>
   );
 }
