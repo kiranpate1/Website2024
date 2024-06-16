@@ -1,7 +1,6 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Project from "./Project";
 import { ProjectInfo } from "./ProjectInfo";
-import { breakpoints, useBreakpoint } from "@/hooks/useBreakpoints";
 
 type ProjectsProps = {
   projects: ProjectInfo[];
@@ -12,7 +11,20 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   // const test1 = useRef() as MutableRefObject<HTMLDivElement | null>;
   const boxCont = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [test, setTest] = useState({ x: 0 });
-  const isDesktop = useBreakpoint(breakpoints.md);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [width, setWidth] = useState<number>(window.innerWidth);
+
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
+
+  const isMobile = width <= 768;
 
   const testMove = (event: { clientX: number; clientY: number }) => {
     setTest({ x: event.clientX });
@@ -40,9 +52,9 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   //   }
   // };
 
-  // window.onmousemove = (event) => {
-  //   setTest({ x: event.clientX });
-  // }
+  window.onmousemove = (event) => {
+    setCursorPosition({ x: event.clientX, y: event.clientY });
+  };
 
   return (
     <div
@@ -54,8 +66,8 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
         className="relative flex flex-col h-full items-center justify-start"
         ref={boxCont}
         style={{
-          gap: isDesktop ? "400px" : "200px",
-          padding: isDesktop ? "200px 0" : "100px 0",
+          gap: isMobile ? "150px" : "300px",
+          padding: isMobile ? "100px 0" : "200px 0",
         }}
       >
         <div
@@ -67,10 +79,11 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
           <Project
             projectInfo={project}
             test={test}
+            cursorPosition={cursorPosition}
             size={{
-              width: isDesktop ? 600 : 300,
-              height: isDesktop ? 400 : 200,
-              corners: isDesktop ? 116 : 68,
+              width: isMobile ? 300 : 600,
+              height: isMobile ? 200 : 400,
+              corners: isMobile ? 68 : 116,
             }}
           />
         ))}

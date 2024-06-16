@@ -1,8 +1,8 @@
 import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
-import { usePointerPosition } from "@/hooks/usePointerInfo";
 import Corners from "../Corners/Corners";
+import Circle from "../Circle/Circle";
 
 // const shouldTrack = true;
 
@@ -14,12 +14,14 @@ type Props = {
     color?: string;
   };
   test: { x: number };
+  cursorPosition: { x: number; y: number };
   size: { width: number; height: number; corners: number };
 };
 
-const Project = ({ projectInfo, test, size }: Props) => {
+const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
   const [normalizedPosition, setNormalizedPosition] = useState(test);
   const [scaleDown, setScaleDown] = useState(0);
+  const [animateColor, setAnimateColor] = useState(projectInfo.color);
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = size.width;
@@ -107,6 +109,8 @@ const Project = ({ projectInfo, test, size }: Props) => {
 
     setTitlePosition(-250);
 
+    setAnimateColor(projectInfo.color);
+
     setLetterTransitions((prev) => {
       return prev.map((item, i) => {
         const {
@@ -142,6 +146,8 @@ const Project = ({ projectInfo, test, size }: Props) => {
     setScaleDown(1);
 
     setTitlePosition(-135);
+
+    setAnimateColor("#fff");
 
     setLetterTransitions((prev) => {
       return prev.map((item) => {
@@ -188,7 +194,7 @@ const Project = ({ projectInfo, test, size }: Props) => {
   });
 
   return (
-    <div className="relative" style={{ width: width }}>
+    <div className="relative" style={{ minWidth: width }}>
       <div
         className="relative w-full overflow-hidden z-[1]"
         ref={divRef}
@@ -198,6 +204,7 @@ const Project = ({ projectInfo, test, size }: Props) => {
         onMouseLeave={mainMove}
       >
         <Corners color={projectInfo.color} size={size.corners} />
+        <Circle color={projectInfo.color} size={size.corners} />
         <motion.div
           className="absolute flex flex-col top-0 left-0 w-full h-full origin-top mix-blend-difference"
           style={{
@@ -208,42 +215,50 @@ const Project = ({ projectInfo, test, size }: Props) => {
             className="w-full origin-top"
             style={{
               minHeight: height,
-              background: projectInfo.color,
+              background: "#fff",
             }}
           />
           <div className="flex origin-top items-center justify-center">
-            <motion.svg
+            <motion.div
               className="scale-x-[-1] origin-top-left"
-              viewBox="0 0 383 108"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
               style={{
                 minWidth: width / 1.2,
                 scaleX: x1,
                 // scaleY: y1,
               }}
             >
-              <path
-                d="M0 80C180.5 -114.5 258 107.5 383 107.5V0H0V80Z"
-                fill={projectInfo.color}
-              />
-            </motion.svg>
-            <motion.svg
+              <svg
+                className="w-full min-w-full"
+                viewBox="0 0 383 108"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 80C180.5 -114.5 258 107.5 383 107.5V0H0V80Z"
+                  fill={"#fff"}
+                />
+              </svg>
+            </motion.div>
+            <motion.div
               className="origin-top-right"
-              viewBox="0 0 383 108"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
               style={{
                 minWidth: width / 1.2,
                 scaleX: x2,
                 // scaleY: y1,
               }}
             >
-              <path
-                d="M383 80C202.5 -114.5 125 107.5 0 107.5V0H383V80Z"
-                fill={projectInfo.color}
-              />
-            </motion.svg>
+              <svg
+                className="w-full min-w-full"
+                viewBox="0 0 383 108"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M383 80C202.5 -114.5 125 107.5 0 107.5V0H383V80Z"
+                  fill={"#fff"}
+                />
+              </svg>
+            </motion.div>
           </div>
         </motion.div>
         <div className="absolute top-0 left-0 w-full h-full z-[-1]">
@@ -252,12 +267,13 @@ const Project = ({ projectInfo, test, size }: Props) => {
             alt="test"
             width={200}
             height={200}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-[72px]"
+            style={{ borderRadius: "72px" }}
           />
-          <div
+          {/* <div
             className="absolute top-0 left-0 w-full h-full mix-blend-difference"
             style={{ background: projectInfo.color }}
-          />
+          /> */}
         </div>
       </div>
 
@@ -290,8 +306,11 @@ const Project = ({ projectInfo, test, size }: Props) => {
               return (
                 <motion.div
                   key={index}
-                  className="text-white font-sans-md origin-bottom-left"
+                  className="font-sans-md origin-bottom-left"
                   style={{
+                    transition: "color 0.4s ease",
+                    transitionDelay: "0.4s",
+                    color: animateColor,
                     marginLeft: "-0.03%",
                     y: springTranslateY,
                     skewY: springSkewY,

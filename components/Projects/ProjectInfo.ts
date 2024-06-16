@@ -10,9 +10,9 @@ export type ProjectInfo = {
 export const Projects = [
   {
     name: "superpower.com",
-    image: "/projects/superpower.png",
+    image: "/projects/superpower-test.png",
     type: ["Design", "Development"],
-    color: "#fff",
+    color: "#45B5FE",
   },
   {
     name: "Toronto Tech Week 2024",
