@@ -2,9 +2,10 @@ import React from "react";
 
 type CornersProps = {
   color?: string;
+  size: number;
 };
 
-const Corners = ({ color }: CornersProps) => {
+const Corners = ({ color, size }: CornersProps) => {
   return (
     <div className="absolute top-0 left-0 w-full h-full z-[1] pointer-events-none">
       <div
@@ -12,26 +13,26 @@ const Corners = ({ color }: CornersProps) => {
         style={{ borderColor: color }}
       />
       <div className="absolute top-0 left-0">
-        <Corner color={color} />
+        <Corner color={color} size={size} />
       </div>
       <div className="absolute top-0 right-0 transform rotate-90">
-        <Corner color={color} />
+        <Corner color={color} size={size} />
       </div>
       <div className="absolute bottom-0 left-0 transform -rotate-90">
-        <Corner color={color} />
+        <Corner color={color} size={size} />
       </div>
       <div className="absolute bottom-0 right-0 transform rotate-180">
-        <Corner color={color} />
+        <Corner color={color} size={size} />
       </div>
     </div>
   );
 };
 
-const Corner = ({ color }: CornersProps) => {
+const Corner = ({ color, size }: CornersProps) => {
   return (
     <svg
-      width="116"
-      height="116"
+      width={size}
+      height={size}
       viewBox="0 0 116 116"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +45,7 @@ const Corner = ({ color }: CornersProps) => {
         <path
           d="M116.001 0.998047C75.7464 0.998047 55.6192 0.998047 40.244 8.83207C26.7197 15.7231 15.724 26.7187 8.83305 40.2431C0.999023 55.6182 0.999023 75.7454 0.999023 116"
           stroke={color}
-          stroke-width="1.99656"
+          stroke-width={(116 / size) * 2}
         />
       </g>
       <defs>
