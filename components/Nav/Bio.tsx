@@ -31,7 +31,7 @@ const Bio = (props: props) => {
   };
 
   useEffect(() => {
-    let factor = 100;
+    let factor = 2;
     const interval = setInterval(() => {
       updateLetterTransitions(factor);
       factor -= 1;
@@ -57,8 +57,8 @@ const Bio = (props: props) => {
     const rect = divRef.current?.getBoundingClientRect();
     if (!rect) return; // Add null check
 
-    const x = factor - rect.left;
-    const width = 100;
+    const x = 0 - rect.left;
+    const width = rect.width;
     const xDivRatio = x / width;
 
     setLetterTransitions((prev) => {
@@ -72,8 +72,8 @@ const Bio = (props: props) => {
             : 0;
         const skewDist =
           xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
-        const translateY = translateDist * Math.PI * 1.5 - Math.PI;
-        const skewY = -skewDist * Math.PI * 1.5 + Math.PI;
+        const translateY = translateDist * Math.PI * factor;
+        const skewY = -skewDist * Math.PI * factor;
         return {
           translateY,
           skewY,
@@ -88,7 +88,7 @@ const Bio = (props: props) => {
         {textArray.map((letter, index) => {
           const motionTranslateY = useTransform(
             motionValue(letterTransitions[index].translateY),
-            (latest: number) => Math.sin(latest) * 350
+            (latest: number) => 330 + Math.sin(latest) * -400
           );
           const springTranslateY = useSpring(motionTranslateY, {
             stiffness: 400,
@@ -97,7 +97,7 @@ const Bio = (props: props) => {
 
           const motionSkewY = useTransform(
             motionValue(letterTransitions[index].skewY),
-            (latest: number) => Math.sin(latest) * 60
+            (latest: number) => Math.sin(latest) * 40
           );
           const springSkewY = useSpring(motionSkewY, {
             stiffness: 400,
