@@ -49,7 +49,7 @@ const config: Config & {
           "line-height": "130%",
         },
         "sans-lg": {
-          "font-size": "1.75rem",
+          "font-size": "1.5rem",
           "letter-spacing": "-0.03rem",
           "line-height": "110%",
         },
@@ -82,7 +82,7 @@ const config: Config & {
           "line-height": "130%",
         },
         "sans-lg": {
-          "font-size": "1.75rem",
+          "font-size": "1.5rem",
           "letter-spacing": "-0.03rem",
           "line-height": "110%",
         },

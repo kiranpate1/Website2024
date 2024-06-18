@@ -9,37 +9,37 @@ export type ProjectInfo = {
 
 export const Projects = [
   {
-    name: "superpower.com",
+    name: "Superpower website",
     image: "/projects/superpower-test.png",
     type: ["Design", "Development"],
-    color: "#45B5FE",
+    color: "#75C8FF",
   },
   {
     name: "Toronto Tech Week 2024",
     image: "/projects/thumbnail-1.png",
     type: ["Development"],
-    color: "#fff",
-  },
-  {
-    name: "workmade.com",
-    image: "/projects/thumbnail-1.png",
-    type: ["Design", "Development"],
-    color: "#fff",
+    color: "#FFEAD7",
   },
   {
     name: "Workmade vday campaign",
     image: "/projects/dtf.png",
     type: ["Design", "Development"],
-    color: "#FFD2D7",
+    color: "#7ADBA7",
   },
   {
     name: "Pursuit app design",
     image: "/projects/pursuit.png",
     type: ["Product"],
-    color: "#fff",
+    color: "#F9DAB2",
   },
   {
-    name: "daybreak.studio",
+    name: "Daybreak website",
+    image: "/projects/efdsdf.png",
+    type: ["Design", "Development"],
+    color: "#16C6DA",
+  },
+  {
+    name: "Workmade website",
     image: "/projects/thumbnail-1.png",
     type: ["Design", "Development"],
     color: "#fff",

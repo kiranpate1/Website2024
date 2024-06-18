@@ -2,7 +2,6 @@ import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 import Corners from "../Corners/Corners";
-import Circle from "../Circle/Circle";
 
 // const shouldTrack = true;
 
@@ -60,11 +59,11 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     return { letter: titleArray[index], position: { xRatio } };
   };
 
-  useEffect(() => {
+  function updateLetterTransitions(cursorPos: number) {
     const rect = divRef.current?.getBoundingClientRect();
     if (!rect) return; // Add null check
 
-    const x = test.x - rect.left;
+    const x = cursorPos - rect.left;
     const width = rect.width;
     const xDivRatio = x / width;
 
@@ -91,6 +90,10 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
         };
       });
     });
+  }
+
+  useEffect(() => {
+    updateLetterTransitions(cursorPosition.x);
   }, [test]);
 
   const mainMove = (event: { clientX: number }) => {
@@ -99,11 +102,6 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
 
     const x = event.clientX - rect.left;
     const width = rect.width;
-    const xDivRatio = x / width;
-
-    setNormalizedPosition({
-      x: x / width,
-    });
 
     setScaleDown(0);
 
@@ -111,25 +109,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
 
     setAnimateColor(projectInfo.color);
 
-    setLetterTransitions((prev) => {
-      return prev.map((item, i) => {
-        const {
-          position: { xRatio: xLetterRatio },
-        } = calculateLetterPosition(i);
-        const translateDist =
-          xLetterRatio !== undefined
-            ? 1 - Math.abs(xLetterRatio - xDivRatio)
-            : 0;
-        const skewDist =
-          xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
-        const translateY = translateDist * Math.PI * 1.5 - Math.PI;
-        const skewY = -skewDist * Math.PI * 1.5 + Math.PI;
-        return {
-          translateY,
-          skewY,
-        };
-      });
-    });
+    updateLetterTransitions(event.clientX);
   };
 
   const boxMove = (event: { clientX: number; clientY: number }) => {
@@ -203,8 +183,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
         onMouseMove={boxMove}
         onMouseLeave={mainMove}
       >
-        <Corners color={projectInfo.color} size={size.corners} />
-        <Circle color={projectInfo.color} size={size.corners} />
+        <Corners color={projectInfo.color} size={size.corners} stroke={2} />
         <motion.div
           className="absolute flex flex-col top-0 left-0 w-full h-full origin-top mix-blend-difference"
           style={{
