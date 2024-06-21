@@ -1,5 +1,11 @@
 import React, { MutableRefObject, useRef, useState, useEffect } from "react";
-import { motion, useTransform, motionValue, useSpring } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useTransform,
+  motionValue,
+  useSpring,
+} from "framer-motion";
 
 type props = {};
 
