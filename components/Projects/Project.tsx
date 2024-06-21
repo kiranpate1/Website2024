@@ -142,25 +142,29 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
   };
 
   function springTranslateY(index: number) {
-    const motionTranslateY = useTransform(
-      motionValue(letterTransitions[index].translateY),
-      (latest: number) => Math.sin(latest) * 200
+    return useSpring(
+      useTransform(
+        motionValue(letterTransitions[index].translateY),
+        (latest: number) => Math.sin(latest) * 200
+      ),
+      {
+        stiffness: 450,
+        damping: 100,
+      }
     );
-    return useSpring(motionTranslateY, {
-      stiffness: 450,
-      damping: 100,
-    });
   }
 
   function springSkewY(index: number) {
-    const motionSkewY = useTransform(
-      motionValue(letterTransitions[index].skewY),
-      (latest: number) => Math.sin(latest) * 60
+    return useSpring(
+      useTransform(
+        motionValue(letterTransitions[index].skewY),
+        (latest: number) => Math.sin(latest) * 60
+      ),
+      {
+        stiffness: 450,
+        damping: 100,
+      }
     );
-    return useSpring(motionSkewY, {
-      stiffness: 450,
-      damping: 100,
-    });
   }
 
   const scaleY1 = useTransform(
