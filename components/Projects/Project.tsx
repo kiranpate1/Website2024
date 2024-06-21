@@ -6,6 +6,7 @@ import Corners from "../Corners/Corners";
 // const shouldTrack = true;
 
 type Props = {
+  key: number;
   projectInfo: {
     name: string;
     image: string;
@@ -18,7 +19,7 @@ type Props = {
   size: { width: string; height: string; corners: number };
 };
 
-const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
+const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
   const [normalizedPosition, setNormalizedPosition] = useState(test);
   const [scaleDown, setScaleDown] = useState(0);
   const [animateColor, setAnimateColor] = useState(projectInfo.color);

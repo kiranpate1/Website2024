@@ -77,6 +77,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
         />
         {projects.map((project, index) => (
           <Project
+            key={index}
             projectInfo={project}
             test={test}
             cursorPosition={cursorPosition}
