@@ -96,7 +96,7 @@ const Bio = (props: props) => {
     });
   }
 
-  function springTranslateY(index: number) {
+  function useSpringTranslateY(index: number) {
     const motionTranslateY = useTransform(
       motionValue(letterTransitions[index].translateY),
       (latest: number) => Math.sin(latest) * -400
@@ -107,7 +107,7 @@ const Bio = (props: props) => {
     });
   }
 
-  function springSkewY(index: number) {
+  function useSpringSkewY(index: number) {
     const motionSkewY = useTransform(
       motionValue(letterTransitions[index].skewY),
       (latest: number) => Math.sin(latest) * 60
@@ -152,8 +152,8 @@ const Bio = (props: props) => {
               style={{
                 fontSize: "4.65vw",
                 marginLeft: "-0.03vw",
-                translateY: springTranslateY(index),
-                skewY: springSkewY(index),
+                translateY: useSpringTranslateY(index),
+                skewY: useSpringSkewY(index),
               }}
             >
               {letter === " " ? "\u00A0" : letter}

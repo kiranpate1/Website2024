@@ -141,7 +141,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     });
   };
 
-  function springTranslateY(index: number) {
+  function useSpringTranslateY(index: number) {
     return useSpring(
       useTransform(
         motionValue(letterTransitions[index].translateY),
@@ -154,7 +154,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     );
   }
 
-  function springSkewY(index: number) {
+  function useSpringSkewY(index: number) {
     return useSpring(
       useTransform(
         motionValue(letterTransitions[index].skewY),
@@ -305,8 +305,8 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
-                    y: springTranslateY(index),
-                    skewY: springSkewY(index),
+                    y: useSpringTranslateY(index),
+                    skewY: useSpringSkewY(index),
                   }}
                 >
                   {letter === " " ? "\u00A0" : letter}
