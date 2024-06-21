@@ -96,28 +96,6 @@ const Bio = (props: props) => {
     });
   }
 
-  function useSpringTranslateY(index: number) {
-    const motionTranslateY = useTransform(
-      motionValue(letterTransitions[index].translateY),
-      (latest: number) => Math.sin(latest) * -400
-    );
-    return useSpring(motionTranslateY, {
-      stiffness: 400,
-      damping: 150,
-    });
-  }
-
-  function useSpringSkewY(index: number) {
-    const motionSkewY = useTransform(
-      motionValue(letterTransitions[index].skewY),
-      (latest: number) => Math.sin(latest) * 60
-    );
-    return useSpring(motionSkewY, {
-      stiffness: 400,
-      damping: 150,
-    });
-  }
-
   const bioTranslateY = useTransform(
     motionValue(bioPosition),
     (latest: number) => latest
@@ -152,8 +130,26 @@ const Bio = (props: props) => {
               style={{
                 fontSize: "4.65vw",
                 marginLeft: "-0.03vw",
-                translateY: useSpringTranslateY(index),
-                skewY: useSpringSkewY(index),
+                translateY: useSpring(
+                  useTransform(
+                    motionValue(letterTransitions[index].translateY),
+                    (latest: number) => Math.sin(latest) * -400
+                  ),
+                  {
+                    stiffness: 400,
+                    damping: 150,
+                  }
+                ),
+                skewY: useSpring(
+                  useTransform(
+                    motionValue(letterTransitions[index].skewY),
+                    (latest: number) => Math.sin(latest) * 60
+                  ),
+                  {
+                    stiffness: 400,
+                    damping: 150,
+                  }
+                ),
               }}
             >
               {letter === " " ? "\u00A0" : letter}

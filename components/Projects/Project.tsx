@@ -141,32 +141,6 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     });
   };
 
-  function useSpringTranslateY(index: number) {
-    return useSpring(
-      useTransform(
-        motionValue(letterTransitions[index].translateY),
-        (latest: number) => Math.sin(latest) * 200
-      ),
-      {
-        stiffness: 450,
-        damping: 100,
-      }
-    );
-  }
-
-  function useSpringSkewY(index: number) {
-    return useSpring(
-      useTransform(
-        motionValue(letterTransitions[index].skewY),
-        (latest: number) => Math.sin(latest) * 60
-      ),
-      {
-        stiffness: 450,
-        damping: 100,
-      }
-    );
-  }
-
   const scaleY1 = useTransform(
     motionValue(scaleDown),
     (latest: number) => latest * 1
@@ -305,8 +279,26 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
-                    y: useSpringTranslateY(index),
-                    skewY: useSpringSkewY(index),
+                    y: useSpring(
+                      useTransform(
+                        motionValue(letterTransitions[index].translateY),
+                        (latest: number) => Math.sin(latest) * 200
+                      ),
+                      {
+                        stiffness: 450,
+                        damping: 100,
+                      }
+                    ),
+                    skewY: useSpring(
+                      useTransform(
+                        motionValue(letterTransitions[index].skewY),
+                        (latest: number) => Math.sin(latest) * 60
+                      ),
+                      {
+                        stiffness: 450,
+                        damping: 100,
+                      }
+                    ),
                   }}
                 >
                   {letter === " " ? "\u00A0" : letter}
