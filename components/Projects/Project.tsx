@@ -11,10 +11,11 @@ type Props = {
     image: string;
     type: string[];
     color?: string;
+    link?: string;
   };
   test: { x: number };
   cursorPosition: { x: number; y: number };
-  size: { width: number; height: number; corners: number };
+  size: { width: string; height: string; corners: number };
 };
 
 const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
@@ -24,6 +25,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = size.width;
+  const svgWidth = Number(width.slice(0, -2)) / 1.2;
   const height = size.height;
   const title = projectInfo.name;
   const titleArray = title.split("");
@@ -174,7 +176,12 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
   });
 
   return (
-    <div className="relative" style={{ minWidth: width }}>
+    <a
+      className="relative"
+      style={{ minWidth: width }}
+      href={projectInfo.link}
+      target="_blank"
+    >
       <div
         className="relative w-full overflow-hidden z-[1]"
         ref={divRef}
@@ -201,7 +208,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
             <motion.div
               className="scale-x-[-1] origin-top-left"
               style={{
-                minWidth: width / 1.2,
+                minWidth: svgWidth + width.slice(-2),
                 scaleX: x1,
                 // scaleY: y1,
               }}
@@ -221,7 +228,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
             <motion.div
               className="origin-top-right"
               style={{
-                minWidth: width / 1.2,
+                minWidth: svgWidth + width.slice(-2),
                 scaleX: x2,
                 // scaleY: y1,
               }}
@@ -246,8 +253,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
             alt="test"
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-[72px]"
-            style={{ borderRadius: "72px" }}
+            className="w-full h-full object-cover"
           />
           {/* <div
             className="absolute top-0 left-0 w-full h-full mix-blend-difference"
@@ -269,7 +275,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                 (latest: number) => Math.sin(latest) * 200
               );
               const springTranslateY = useSpring(motionTranslateY, {
-                stiffness: 400,
+                stiffness: 450,
                 damping: 100,
               });
 
@@ -278,7 +284,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                 (latest: number) => Math.sin(latest) * 60
               );
               const springSkewY = useSpring(motionSkewY, {
-                stiffness: 400,
+                stiffness: 450,
                 damping: 100,
               });
 
@@ -302,7 +308,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
           </motion.div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

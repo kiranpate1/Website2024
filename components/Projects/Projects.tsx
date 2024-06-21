@@ -81,8 +81,8 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
             test={test}
             cursorPosition={cursorPosition}
             size={{
-              width: isMobile ? 300 : 600,
-              height: isMobile ? 200 : 400,
+              width: isMobile ? "300px" : "40vw",
+              height: isMobile ? "200px" : "26.67vw",
               corners: isMobile ? 68 : 116,
             }}
           />
