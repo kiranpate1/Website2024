@@ -6,6 +6,7 @@ import {
   motionValue,
   useSpring,
 } from "framer-motion";
+import useLetterAnimation from "../../hooks/useLetterAnimation";
 
 type props = {};
 
@@ -46,14 +47,12 @@ const Bio = (props: props) => {
         if (factor < 0) {
           clearInterval(interval);
           setTimeout(() => {
-            setLetterTransitions((prev) => {
-              return prev.map((item) => {
-                return {
-                  translateY: 0,
-                  skewY: 0,
-                };
-              });
-            });
+            setLetterTransitions((prev) =>
+              prev.map(() => ({
+                translateY: 0,
+                skewY: 0,
+              }))
+            );
           }, 200);
 
           setBioPosition(0);
@@ -75,8 +74,8 @@ const Bio = (props: props) => {
     const width = rect.width;
     const xDivRatio = x / width;
 
-    setLetterTransitions((prev) => {
-      return prev.map((item, i) => {
+    setLetterTransitions((prev) =>
+      prev.map((item, i) => {
         const {
           position: { xRatio: xLetterRatio },
         } = calculateLetterPosition(i);
@@ -92,18 +91,15 @@ const Bio = (props: props) => {
           translateY,
           skewY,
         };
-      });
-    });
+      })
+    );
   }
 
   const bioTranslateY = useTransform(
     motionValue(bioPosition),
-    (latest: number) => latest
+    (latest) => latest
   );
-  const bioScale1 = useTransform(
-    motionValue(bioSize),
-    (latest: number) => latest
-  );
+  const bioScale1 = useTransform(motionValue(bioSize), (latest) => latest);
 
   const bioY = useSpring(bioTranslateY, {
     stiffness: 400,
@@ -123,6 +119,11 @@ const Bio = (props: props) => {
         className="origin-top-left pointer-events-auto"
       >
         {bioArray.map((letter, index) => {
+          const { translateYSpring, skewYSpring } = useLetterAnimation(
+            letterTransitions[index].translateY,
+            letterTransitions[index].skewY
+          );
+
           return (
             <motion.div
               key={index}
@@ -130,26 +131,8 @@ const Bio = (props: props) => {
               style={{
                 fontSize: "4.65vw",
                 marginLeft: "-0.03vw",
-                translateY: useSpring(
-                  useTransform(
-                    motionValue(letterTransitions[index].translateY),
-                    (latest: number) => Math.sin(latest) * -400
-                  ),
-                  {
-                    stiffness: 400,
-                    damping: 150,
-                  }
-                ),
-                skewY: useSpring(
-                  useTransform(
-                    motionValue(letterTransitions[index].skewY),
-                    (latest: number) => Math.sin(latest) * 60
-                  ),
-                  {
-                    stiffness: 400,
-                    damping: 150,
-                  }
-                ),
+                translateY: translateYSpring,
+                skewY: skewYSpring,
               }}
             >
               {letter === " " ? "\u00A0" : letter}

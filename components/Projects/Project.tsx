@@ -2,6 +2,7 @@ import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 import Corners from "../Corners/Corners";
+import useLetterAnimation1 from "../../hooks/useLetterAnimation1";
 
 // const shouldTrack = true;
 
@@ -270,6 +271,10 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
             style={{ y: titleY }}
           >
             {titleArray.map((letter, index) => {
+              const { translateYSpring, skewYSpring } = useLetterAnimation1(
+                letterTransitions[index].translateY,
+                letterTransitions[index].skewY
+              );
               return (
                 <motion.div
                   key={index}
@@ -279,26 +284,8 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
-                    y: useSpring(
-                      useTransform(
-                        motionValue(letterTransitions[index].translateY),
-                        (latest: number) => Math.sin(latest) * 200
-                      ),
-                      {
-                        stiffness: 450,
-                        damping: 100,
-                      }
-                    ),
-                    skewY: useSpring(
-                      useTransform(
-                        motionValue(letterTransitions[index].skewY),
-                        (latest: number) => Math.sin(latest) * 60
-                      ),
-                      {
-                        stiffness: 450,
-                        damping: 100,
-                      }
-                    ),
+                    translateY: translateYSpring,
+                    skewY: skewYSpring,
                   }}
                 >
                   {letter === " " ? "\u00A0" : letter}
