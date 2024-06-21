@@ -14,10 +14,11 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   //   const [width, setWidth] = useState<number>(window.innerWidth);
 
-  // useEffect(() => {
-  //   window.onmousemove = (event) => {
-  //     setCursorPosition({ x: event.clientX, y: event.clientY });
-  //   };
+  useEffect(() => {
+    window.onmousemove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+  });
 
   //   function handleWindowSizeChange() {
   //     setWidth(window.innerWidth);
@@ -32,6 +33,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
 
   const testMove = (event: { clientX: number; clientY: number }) => {
     setTest({ x: event.clientX });
+    console.log("hi");
   };
 
   // const calculateBoxPosition = (index: number) => {

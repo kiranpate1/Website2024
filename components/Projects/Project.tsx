@@ -31,7 +31,7 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
   const title = projectInfo.name;
   const titleArray = title.split("");
 
-  // document.onmousemove = (event) => {
+  // window.onmousemove = (event) => {
   //   setNormalizedPosition(test);
   // };
 
