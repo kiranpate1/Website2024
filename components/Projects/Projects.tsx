@@ -52,9 +52,11 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   //   }
   // };
 
-  window.onmousemove = (event) => {
-    setCursorPosition({ x: event.clientX, y: event.clientY });
-  };
+  useEffect(() => {
+    window.onmousemove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+  });
 
   return (
     <div
