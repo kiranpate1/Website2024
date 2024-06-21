@@ -12,23 +12,23 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const boxCont = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [test, setTest] = useState({ x: 0 });
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [width, setWidth] = useState<number>(window.innerWidth);
+  //   const [width, setWidth] = useState<number>(window.innerWidth);
 
-  useEffect(() => {
-    window.onmousemove = (event) => {
-      setCursorPosition({ x: event.clientX, y: event.clientY });
-    };
+  // useEffect(() => {
+  //   window.onmousemove = (event) => {
+  //     setCursorPosition({ x: event.clientX, y: event.clientY });
+  //   };
 
-    function handleWindowSizeChange() {
-      setWidth(window.innerWidth);
-    }
-    window.addEventListener("resize", handleWindowSizeChange);
-    return () => {
-      window.removeEventListener("resize", handleWindowSizeChange);
-    };
-  }, []);
+  //   function handleWindowSizeChange() {
+  //     setWidth(window.innerWidth);
+  //   }
+  //   window.addEventListener("resize", handleWindowSizeChange);
+  //   return () => {
+  //     window.removeEventListener("resize", handleWindowSizeChange);
+  //   };
+  // }, []);
 
-  const isMobile = width <= 768;
+  //   const isMobile = width <= 768;
 
   const testMove = (event: { clientX: number; clientY: number }) => {
     setTest({ x: event.clientX });
@@ -66,8 +66,10 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
         className="relative flex flex-col h-full items-center justify-start"
         ref={boxCont}
         style={{
-          gap: isMobile ? "150px" : "300px",
-          padding: isMobile ? "100px 0" : "200px 0",
+          // gap: isMobile ? "150px" : "300px",
+          // padding: isMobile ? "100px 0" : "200px 0",
+          gap: "300px",
+          padding: "200px 0",
         }}
       >
         <div
@@ -82,9 +84,12 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
             test={test}
             cursorPosition={cursorPosition}
             size={{
-              width: isMobile ? "300px" : "40vw",
-              height: isMobile ? "200px" : "26.67vw",
-              corners: isMobile ? 68 : 116,
+              // width: isMobile ? "300px" : "40vw",
+              // height: isMobile ? "200px" : "26.67vw",
+              // corners: isMobile ? 68 : 116,
+              width: "40vw",
+              height: "26.67vw",
+              corners: 116,
             }}
           />
         ))}
