@@ -14,15 +14,15 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [width, setWidth] = useState<number>(window.innerWidth);
 
-  // function handleWindowSizeChange() {
-  //   setWidth(window.innerWidth);
-  // }
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleWindowSizeChange);
-  //   return () => {
-  //     window.removeEventListener("resize", handleWindowSizeChange);
-  //   };
-  // }, []);
+  useEffect(() => {
+    function handleWindowSizeChange() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
 
   const isMobile = width <= 768;
 
