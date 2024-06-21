@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useWindowDimension } from "./useWindowDimension";
-import { useDebounceValue } from "usehooks-ts";
 
 export function usePerformanceProfile() {
   const [isLowPerformance, setIsLowPerformance] = useState(false);
@@ -55,7 +54,9 @@ export function usePerformanceProfile() {
       // If more than 33ms since last frame (i.e. below 30fps)
       // have drop freames
       console.log(
-        `Frame drop detected - fps: ${1000 / dTime} , ${lowPerformanceThreshold - droppedFrameCount + 1} drops before activating low performance mode`,
+        `Frame drop detected - fps: ${1000 / dTime} , ${
+          lowPerformanceThreshold - droppedFrameCount + 1
+        } drops before activating low performance mode`
       );
 
       if (droppedFrameCount > lowPerformanceThreshold) {
