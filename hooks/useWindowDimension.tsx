@@ -26,29 +26,19 @@ export const WindowDimensionContextProvider = ({ children }: Props) => {
   useEffect(() => {
     let timeout: any;
 
-    const updateDim = () => {
+    setDim({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    const handleResize = (): void =>
       setDim({
         width: window.innerWidth,
         height: window.innerHeight,
       });
 
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setDebouncedDim({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
-        setIsResizing(false);
-      }, debouncedDimensionDelay);
-
-      setIsResizing(true);
-    };
-    updateDim();
-    window.addEventListener("resize", updateDim);
-    return () => {
-      timeout && clearTimeout(timeout);
-      window.removeEventListener("resize", updateDim);
-    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -69,6 +59,6 @@ export const WindowDimensionContextProvider = ({ children }: Props) => {
  *
  * @returns
  * {width, height}
- * 
+ *
  */
 export const useWindowDimension = () => useContext(WindowDimensionContext);
