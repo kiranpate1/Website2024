@@ -6,7 +6,6 @@ import {
   motionValue,
   useSpring,
 } from "framer-motion";
-import useLetterAnimation from "../../hooks/useLetterAnimation";
 
 type props = {};
 
