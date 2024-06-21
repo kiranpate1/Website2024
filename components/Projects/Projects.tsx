@@ -15,6 +15,10 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
+    window.onmousemove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+
     function handleWindowSizeChange() {
       setWidth(window.innerWidth);
     }
@@ -51,12 +55,6 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   //     const distanceFromMiddle = elementMiddle;
   //   }
   // };
-
-  useEffect(() => {
-    window.onmousemove = (event) => {
-      setCursorPosition({ x: event.clientX, y: event.clientY });
-    };
-  });
 
   return (
     <div
