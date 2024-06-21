@@ -111,6 +111,30 @@ const Bio = (props: props) => {
     damping: 100,
   });
 
+  const TranslateYSpring = (index: number) =>
+    useSpring(
+      useTransform(
+        motionValue(letterTransitions[index].translateY),
+        (latest: number) => Math.sin(latest) * -400
+      ),
+      {
+        stiffness: 400,
+        damping: 150,
+      }
+    );
+
+  const SkewYSpring = (index: number) =>
+    useSpring(
+      useTransform(
+        motionValue(letterTransitions[index].skewY),
+        (latest: number) => Math.sin(latest) * 60
+      ),
+      {
+        stiffness: 400,
+        damping: 150,
+      }
+    );
+
   return (
     <div ref={divRef} className="absolute w-full top-0 left-0 p-1">
       <motion.div
@@ -119,11 +143,6 @@ const Bio = (props: props) => {
         className="origin-top-left pointer-events-auto"
       >
         {bioArray.map((letter, index) => {
-          const { translateYSpring, skewYSpring } = useLetterAnimation(
-            letterTransitions[index].translateY,
-            letterTransitions[index].skewY
-          );
-
           return (
             <motion.div
               key={index}
@@ -131,8 +150,8 @@ const Bio = (props: props) => {
               style={{
                 fontSize: "4.65vw",
                 marginLeft: "-0.03vw",
-                translateY: translateYSpring,
-                skewY: skewYSpring,
+                y: TranslateYSpring(index),
+                skewY: SkewYSpring(index),
               }}
             >
               {letter === " " ? "\u00A0" : letter}
