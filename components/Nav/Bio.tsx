@@ -90,6 +90,28 @@ const Bio = (props: props) => {
     });
   }
 
+  function springTranslateY(index: number) {
+    const motionTranslateY = useTransform(
+      motionValue(letterTransitions[index].translateY),
+      (latest: number) => Math.sin(latest) * -400
+    );
+    return useSpring(motionTranslateY, {
+      stiffness: 400,
+      damping: 150,
+    });
+  }
+
+  function springSkewY(index: number) {
+    const motionSkewY = useTransform(
+      motionValue(letterTransitions[index].skewY),
+      (latest: number) => Math.sin(latest) * 60
+    );
+    return useSpring(motionSkewY, {
+      stiffness: 400,
+      damping: 150,
+    });
+  }
+
   const bioTranslateY = useTransform(
     motionValue(bioPosition),
     (latest: number) => latest
@@ -117,24 +139,6 @@ const Bio = (props: props) => {
         className="origin-top-left pointer-events-auto"
       >
         {bioArray.map((letter, index) => {
-          const motionTranslateY = useTransform(
-            motionValue(letterTransitions[index].translateY),
-            (latest: number) => Math.sin(latest) * -400
-          );
-          const springTranslateY = useSpring(motionTranslateY, {
-            stiffness: 400,
-            damping: 150,
-          });
-
-          const motionSkewY = useTransform(
-            motionValue(letterTransitions[index].skewY),
-            (latest: number) => Math.sin(latest) * 60
-          );
-          const springSkewY = useSpring(motionSkewY, {
-            stiffness: 400,
-            damping: 150,
-          });
-
           return (
             <motion.div
               key={index}
@@ -142,8 +146,8 @@ const Bio = (props: props) => {
               style={{
                 fontSize: "4.65vw",
                 marginLeft: "-0.03vw",
-                translateY: springTranslateY,
-                skewY: springSkewY,
+                translateY: springTranslateY(index),
+                skewY: springSkewY(index),
               }}
             >
               {letter === " " ? "\u00A0" : letter}

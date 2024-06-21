@@ -141,6 +141,28 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     });
   };
 
+  function springTranslateY(index: number) {
+    const motionTranslateY = useTransform(
+      motionValue(letterTransitions[index].translateY),
+      (latest: number) => Math.sin(latest) * 200
+    );
+    return useSpring(motionTranslateY, {
+      stiffness: 450,
+      damping: 100,
+    });
+  }
+
+  function springSkewY(index: number) {
+    const motionSkewY = useTransform(
+      motionValue(letterTransitions[index].skewY),
+      (latest: number) => Math.sin(latest) * 60
+    );
+    return useSpring(motionSkewY, {
+      stiffness: 450,
+      damping: 100,
+    });
+  }
+
   const scaleY1 = useTransform(
     motionValue(scaleDown),
     (latest: number) => latest * 1
@@ -270,24 +292,6 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
             style={{ y: titleY }}
           >
             {titleArray.map((letter, index) => {
-              const motionTranslateY = useTransform(
-                motionValue(letterTransitions[index].translateY),
-                (latest: number) => Math.sin(latest) * 200
-              );
-              const springTranslateY = useSpring(motionTranslateY, {
-                stiffness: 450,
-                damping: 100,
-              });
-
-              const motionSkewY = useTransform(
-                motionValue(letterTransitions[index].skewY),
-                (latest: number) => Math.sin(latest) * 60
-              );
-              const springSkewY = useSpring(motionSkewY, {
-                stiffness: 450,
-                damping: 100,
-              });
-
               return (
                 <motion.div
                   key={index}
@@ -297,8 +301,8 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
-                    y: springTranslateY,
-                    skewY: springSkewY,
+                    y: springTranslateY(index),
+                    skewY: springSkewY(index),
                   }}
                 >
                   {letter === " " ? "\u00A0" : letter}
