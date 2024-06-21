@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { WindowDimensionContextProvider } from "@/hooks/useWindowDimension";
 import PointerContextProvider from "@/components/PointerContextProvider/PointerContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -49,9 +48,7 @@ export default function RootLayout({
       `}
         style={{ textRendering: "geometricPrecision" }}
       >
-        <WindowDimensionContextProvider>
-          <PointerContextProvider>{children}</PointerContextProvider>
-        </WindowDimensionContextProvider>
+        <PointerContextProvider>{children}</PointerContextProvider>
       </body>
     </html>
   );
