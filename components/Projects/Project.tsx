@@ -175,7 +175,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
     damping: 100,
   });
 
-  const fml = (index: number) =>
+  const Fml = (index: number) =>
     useSpring(
       useTransform(
         motionValue(letterTransitions[index].translateY),
@@ -187,7 +187,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
       }
     );
 
-  const bitchass = (index: number) =>
+  const Bitchass = (index: number) =>
     useSpring(
       useTransform(
         motionValue(letterTransitions[index].skewY),
@@ -303,8 +303,8 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
-                    y: fml(index),
-                    skewY: bitchass(index),
+                    y: Fml(index),
+                    skewY: Bitchass(index),
                   }}
                 >
                   {letter === " " ? "\u00A0" : letter}
