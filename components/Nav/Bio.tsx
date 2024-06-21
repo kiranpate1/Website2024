@@ -5,52 +5,60 @@ type props = {};
 
 const Bio = (props: props) => {
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
-  const textRef = useRef() as MutableRefObject<HTMLDivElement | null>;
-  const text =
-    "Kiran Patel is a designer, developer, and part-time nuisance in Toronto, from York-Sheridan design (YSDN). He is currently at Daybreak.";
-  const textArray = text.split("");
+  const bioRef = useRef() as MutableRefObject<HTMLDivElement | null>;
+  const bio =
+    "Kiran Patel is a designer, developer, and part-time nuissance in Toronto, from York-Sheridan design (YSDN). He is currently at Daybreak.";
+  const bioArray = bio.split("");
   const [letterTransitions, setLetterTransitions] = useState(
-    textArray.map((letter) => ({
+    bioArray.map((letter) => ({
       translateY: 0,
       skewY: 0,
     }))
   );
-  const [number, setNumber] = useState(0);
+  const [bioPosition, setBioPosition] = useState(320);
+  const [bioScale, setBioScale] = useState(1);
 
   const calculateLetterPosition = (index: number) => {
-    if (!divRef.current || !textRef.current)
+    if (!divRef.current || !bioRef.current)
       return { letter: "", position: { xRatio: 0 } };
     const divRect = divRef.current.getBoundingClientRect();
-    const letterElement = textRef.current.children[index];
+    const letterElement = bioRef.current.children[index];
     if (!letterElement) return { letter: "", position: { xRatio: 0 } };
     const letterRect = letterElement.getBoundingClientRect();
     const letterLeft = letterRect.left;
     const x = letterLeft - divRect.left;
     const xRatio = x / divRect.width;
-    return { letter: textArray[index], position: { xRatio } };
+    return { letter: bioArray[index], position: { xRatio } };
   };
 
   useEffect(() => {
-    let factor = 2;
-    const interval = setInterval(() => {
-      updateLetterTransitions(factor);
-      factor -= 1;
-      if (factor < 0) {
-        clearInterval(interval);
-        setLetterTransitions((prev) => {
-          return prev.map((item) => {
-            return {
-              translateY: 1,
-              skewY: 0,
-            };
-          });
-        });
-      }
-    }, 20);
+    setTimeout(() => {
+      let factor = 4;
+      const interval = setInterval(() => {
+        updateLetterTransitions(factor);
+        factor -= 1;
+        if (factor < 0) {
+          clearInterval(interval);
+          setTimeout(() => {
+            setLetterTransitions((prev) => {
+              return prev.map((item) => {
+                return {
+                  translateY: 0,
+                  skewY: 0,
+                };
+              });
+            });
+          }, 200);
 
-    return () => {
-      clearInterval(interval);
-    };
+          setBioPosition(0);
+          setBioScale(0.5);
+        }
+      }, 50);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, 1000);
   }, []);
 
   function updateLetterTransitions(factor: number) {
@@ -71,9 +79,9 @@ const Bio = (props: props) => {
             ? 1 - Math.abs(xLetterRatio - xDivRatio)
             : 0;
         const skewDist =
-          xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
-        const translateY = translateDist * Math.PI * factor;
-        const skewY = -skewDist * Math.PI * factor;
+          xLetterRatio !== undefined ? Math.abs(xDivRatio - xLetterRatio) : 0;
+        const translateY = translateDist * Math.PI - factor * 1;
+        const skewY = -skewDist * Math.PI - factor * 1;
         return {
           translateY,
           skewY,
@@ -82,26 +90,49 @@ const Bio = (props: props) => {
     });
   }
 
+  const bioTranslateY = useTransform(
+    motionValue(bioPosition),
+    (latest: number) => latest
+  );
+  const bioScaleX = useTransform(
+    motionValue(bioScale),
+    (latest: number) => latest
+  );
+
+  const bioY = useSpring(bioTranslateY, {
+    stiffness: 400,
+    damping: 30,
+  });
+
+  const bioScaleY = useSpring(bioScaleX, {
+    stiffness: 400,
+    damping: 100,
+  });
+
   return (
-    <div ref={divRef} className="absolute w-full top-0 left-0 origin-top-left">
-      <div ref={textRef} className="">
-        {textArray.map((letter, index) => {
+    <div ref={divRef} className="absolute w-full top-0 left-0">
+      <motion.div
+        ref={bioRef}
+        style={{ y: bioY, scale: bioScaleY }}
+        className="origin-top-left pointer-events-auto"
+      >
+        {bioArray.map((letter, index) => {
           const motionTranslateY = useTransform(
             motionValue(letterTransitions[index].translateY),
-            (latest: number) => 330 + Math.sin(latest) * -400
+            (latest: number) => Math.sin(latest) * -400
           );
           const springTranslateY = useSpring(motionTranslateY, {
             stiffness: 400,
-            damping: 100,
+            damping: 150,
           });
 
           const motionSkewY = useTransform(
             motionValue(letterTransitions[index].skewY),
-            (latest: number) => Math.sin(latest) * 40
+            (latest: number) => Math.sin(latest) * 30
           );
           const springSkewY = useSpring(motionSkewY, {
             stiffness: 400,
-            damping: 100,
+            damping: 150,
           });
 
           return (
@@ -110,7 +141,7 @@ const Bio = (props: props) => {
               className="font-sans-lg origin-bottom-left inline-block"
               style={{
                 fontSize: "4.7vw",
-                marginLeft: "-0.03%",
+                marginLeft: "-0.03vw",
                 translateY: springTranslateY,
                 skewY: springSkewY,
               }}
@@ -119,7 +150,7 @@ const Bio = (props: props) => {
             </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 };

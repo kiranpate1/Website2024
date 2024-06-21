@@ -5,7 +5,7 @@ type props = {};
 
 const Nav = (props: props) => {
   return (
-    <nav className="fixed z-10 top-0 left-0 w-full h-auto">
+    <nav className="fixed z-10 top-0 left-0 w-full h-auto pointer-events-none">
       <Bio />
       <div className="absolute top-0 right-0">
         <ul>

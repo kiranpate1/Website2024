@@ -287,7 +287,7 @@ const Project = ({ projectInfo, test, cursorPosition, size }: Props) => {
                   key={index}
                   className="font-sans-md origin-bottom-left"
                   style={{
-                    transition: "color 0.4s ease",
+                    transition: "color 0.8s ease",
                     transitionDelay: "0.4s",
                     color: animateColor,
                     marginLeft: "-0.03%",
