@@ -7,9 +7,11 @@ import {
   useSpring,
 } from "framer-motion";
 
-type props = {};
+type props = {
+  isMobile: boolean;
+};
 
-const Bio = (props: props) => {
+const Bio = ({ isMobile }: props) => {
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const bioRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const bio =
@@ -24,6 +26,9 @@ const Bio = (props: props) => {
   const [bioPosition, setBioPosition] = useState(320);
   const [bioSize, setBioSize] = useState(1);
 
+  //check if mobile
+
+  //letter transition
   const calculateLetterPosition = (index: number) => {
     if (!divRef.current || !bioRef.current)
       return { letter: "", position: { xRatio: 0 } };
@@ -135,10 +140,14 @@ const Bio = (props: props) => {
     );
 
   return (
-    <div ref={divRef} className="absolute w-full top-0 left-0 p-1">
+    <div
+      ref={divRef}
+      className="absolute w-full top-0 left-0"
+      style={{ padding: "0.3vw" }}
+    >
       <motion.div
         ref={bioRef}
-        style={{ y: bioY, scale: bioScale }}
+        style={{ y: bioY, scale: isMobile ? 1 : bioScale }}
         className="origin-top-left pointer-events-auto"
       >
         {bioArray.map((letter, index) => {
@@ -147,7 +156,7 @@ const Bio = (props: props) => {
               key={index}
               className="font-sans-lg origin-bottom-left inline-block"
               style={{
-                fontSize: "4.65vw",
+                fontSize: "calc(1.1px + 4.55vw)",
                 marginLeft: "-0.03vw",
                 y: TranslateYSpring(index),
                 skewY: SkewYSpring(index),

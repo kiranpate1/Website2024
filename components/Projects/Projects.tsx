@@ -1,5 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Project from "./Project";
+import { motion } from "framer-motion";
 import { ProjectInfo } from "./ProjectInfo";
 
 type ProjectsProps = {
@@ -33,7 +34,6 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
 
   const testMove = (event: { clientX: number; clientY: number }) => {
     setTest({ x: event.clientX });
-    console.log("hi");
   };
 
   // const calculateBoxPosition = (index: number) => {
@@ -59,10 +59,13 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   // };
 
   return (
-    <div
-    // className="relative w-full h-[100vh] overflow-scroll flex items-start"
-    // ref={test1}
-    // onScroll={testScroll}
+    <motion.div
+      // className="relative w-full h-[100vh] overflow-scroll flex items-start"
+      // ref={test1}
+      // onScroll={testScroll}
+      initial={{ filter: "blur(20px)", opacity: 0 }}
+      animate={{ filter: "blur(0px)", opacity: 1 }}
+      transition={{ duration: 0.6, delay: 1, ease: "easeInOut" }}
     >
       <div
         className="relative flex flex-col h-full items-center justify-start"
@@ -96,7 +99,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,7 +1,9 @@
 import React from "react";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 
-type props = {};
+type props = {
+  isMobile: boolean;
+};
 
 const socialInfo = [
   { name: "TW", link: "https://twitter.com/pate1kiran" },
@@ -25,17 +27,28 @@ function skewLeave(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
   element.style.transform = `skew(0deg, 0deg)`;
 }
 
-const Socials = (props: props) => {
+const Socials = ({ isMobile }: props) => {
   return (
-    <div className="flex gap-4 absolute top-0 right-0 pointer-events-auto">
-      {socialInfo.map((item) => (
+    <div
+      className="flex gap-4 absolute pointer-events-auto"
+      style={{
+        top: isMobile ? "auto" : 0,
+        right: isMobile ? "auto" : 0,
+        bottom: isMobile ? 0 : "auto",
+        left: isMobile ? 0 : "auto",
+      }}
+    >
+      {socialInfo.map((item, index) => (
         <motion.a
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.1, delay: 2 + 0.3 * index }}
           key={item.name}
-          className="font-mono-reg flex transition-transform duration-100 p-1"
+          className="font-mono-reg flex transition-transform duration-100"
+          style={{ padding: "0.3vw" }}
           href={item.link}
           onMouseMove={skew}
           onMouseLeave={skewLeave}
-          style={{}}
         >
           {item.name}
         </motion.a>
