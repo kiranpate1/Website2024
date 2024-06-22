@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Bio from "./Bio";
 import Socials from "./Socials";
+import Scrim from "./Scrim";
 
 type props = {};
 
@@ -29,6 +30,7 @@ const Nav = (props: props) => {
         transition: "height 0.5s ease-in-out",
       }}
     >
+      <Scrim isMobile={isMobile} />
       <Bio isMobile={isMobile} />
       <Socials isMobile={isMobile} />
     </nav>
