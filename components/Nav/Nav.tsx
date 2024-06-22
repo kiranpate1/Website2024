@@ -24,7 +24,10 @@ const Nav = (props: props) => {
   return (
     <nav
       className="fixed z-10 top-0 left-0 w-full pointer-events-none"
-      style={{ height: isMobile ? "100%" : "auto" }}
+      style={{
+        height: isMobile ? "100%" : "auto",
+        transition: "height 0.5s ease-in-out",
+      }}
     >
       <Bio isMobile={isMobile} />
       <Socials isMobile={isMobile} />
