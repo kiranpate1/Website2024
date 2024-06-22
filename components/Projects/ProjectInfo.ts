@@ -12,14 +12,14 @@ export type ProjectInfo = {
 export const Projects = [
   {
     name: "Superpower website",
-    image: "/projects/superpower-test.png",
+    image: "/projects/superpower.png",
     type: ["Design", "Development"],
     color: "#75C8FF",
     link: "https://superpower.com",
   },
   {
     name: "Toronto Tech Week 2024",
-    image: "/projects/thumbnail-1.png",
+    image: "/projects/ttw.png",
     type: ["Development"],
     color: "#FFEAD7",
     link: "https://torontotechweek2024.com",
@@ -47,14 +47,14 @@ export const Projects = [
   },
   {
     name: "Workmade website",
-    image: "/projects/thumbnail-1.png",
+    image: "/projects/workmade.png",
     type: ["Design", "Development"],
     color: "#fff",
     link: "https://workmade.com",
   },
   {
-    name: "My failing art",
-    image: "/projects/thumbnail-1.png",
+    name: "My art instagram",
+    image: "/projects/art.png",
     type: ["Artwork"],
     color: "#fff",
     link: "https://instagram.com/artsbykiran",
