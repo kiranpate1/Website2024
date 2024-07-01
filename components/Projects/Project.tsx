@@ -332,6 +332,7 @@ const Project = ({
             {types.map((type, index) => {
               return (
                 <motion.div
+                  key={index}
                   initial={{
                     opacity: 0,
                     transform: "scale(0.8)",
