@@ -2,6 +2,7 @@ import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 import Corners from "../Corners/Corners";
+import Tag from "./Tag";
 
 // const shouldTrack = true;
 
@@ -14,12 +15,22 @@ type Props = {
     color?: string;
     link?: string;
   };
+  isCurrent?: boolean;
+  isMobile: boolean;
   test: { x: number };
   cursorPosition: { x: number; y: number };
   size: { width: string; height: string; corners: number };
 };
 
-const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
+const Project = ({
+  key,
+  projectInfo,
+  test,
+  cursorPosition,
+  isCurrent,
+  isMobile,
+  size,
+}: Props) => {
   const [normalizedPosition, setNormalizedPosition] = useState(test);
   const [scaleDown, setScaleDown] = useState(0);
   const [animateColor, setAnimateColor] = useState(projectInfo.color);
@@ -30,13 +41,14 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
   const height = size.height;
   const title = projectInfo.name;
   const titleArray = title.split("");
+  const types = projectInfo.type;
 
   // window.onmousemove = (event) => {
   //   setNormalizedPosition(test);
   // };
 
   const [letterTransitions, setLetterTransitions] = useState(
-    titleArray.map((letter) => ({
+    titleArray.map((_letter) => ({
       translateY: 0,
       skewY: 0,
     }))
@@ -75,7 +87,7 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
     });
 
     setLetterTransitions((prev) => {
-      return prev.map((item, i) => {
+      return prev.map((_item, i) => {
         const {
           position: { xRatio: xLetterRatio },
         } = calculateLetterPosition(i);
@@ -133,7 +145,7 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
     setAnimateColor("#fff");
 
     setLetterTransitions((prev) => {
-      return prev.map((item) => {
+      return prev.map((_item) => {
         return {
           translateY: 1,
           skewY: 0,
@@ -202,8 +214,11 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
 
   return (
     <a
-      className="relative"
-      style={{ minWidth: width }}
+      className="relative snap-center"
+      style={{
+        minWidth: width,
+        scrollSnapAlign: isMobile ? "snap-center" : "none",
+      }}
       href={projectInfo.link}
       target="_blank"
     >
@@ -288,7 +303,7 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
       </div>
 
       <div className="absolute h-0 w-full bottom-0 left-0 flex items-start justify-center z-0">
-        <div className="relative h-20 w-full overflow-hidden pointer-events-none">
+        <div className="relative h-[124px] w-full overflow-hidden pointer-events-none">
           <motion.div
             className="relative flex justify-center items-center"
             ref={titleRef}
@@ -313,6 +328,27 @@ const Project = ({ key, projectInfo, test, cursorPosition, size }: Props) => {
               );
             })}
           </motion.div>
+          <div className="absolute bottom-0 w-full flex flex-4 gap-4 font-mono-reg justify-center items-center">
+            {types.map((type, index) => {
+              return (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    transform: "scale(0.8)",
+                    // filter: "blur(20px)"
+                  }}
+                  animate={{
+                    opacity: scaleDown == 0 ? 0 : 1,
+                    transform: scaleDown == 0 ? "scale(0.8)" : "scale(1)",
+                    // filter: scaleDown == 0 ? "blur(20px)" : "blur(0px)",
+                  }}
+                  transition={{ duration: 0.3, delay: 0.2 + 0.2 * index }}
+                >
+                  <Tag key={index} type={type} />
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </a>

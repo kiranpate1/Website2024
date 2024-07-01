@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Project from "./Project";
-import { motion } from "framer-motion";
+import { motion, useMotionValueEvent } from "framer-motion";
 import { ProjectInfo } from "./ProjectInfo";
 
 type ProjectsProps = {
@@ -14,6 +14,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const [test, setTest] = useState({ x: 0 });
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [width, setWidth] = useState<number>(0);
+  const [currentProtocol, setCurrentProtocol] = useState(0);
 
   useEffect(() => {
     window.onmousemove = (event) => {
@@ -35,6 +36,12 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
   const testMove = (event: { clientX: number; clientY: number }) => {
     setTest({ x: event.clientX });
   };
+
+  // useMotionValueEvent(progress, "change", (latest) => {
+  //   const withOffset = latest + 0.5;
+  //   const currentItem = Math.round(withOffset * projects.length);
+  //   setCurrentProtocol(currentItem);
+  // });
 
   // const calculateBoxPosition = (index: number) => {
   //   if (!boxCont.current) return;
@@ -68,33 +75,35 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
       transition={{ duration: 0.6, delay: 1, ease: "easeInOut" }}
     >
       <div
-        className="relative flex flex-col h-full items-center justify-start"
+        className="relative flex flex-col h-[100vh] items-center overflow-scroll justify-start"
         ref={boxCont}
         style={{
           gap: isMobile ? "150px" : "300px",
           padding: isMobile ? "100px 0" : "200px 0",
-          // gap: "300px",
-          // padding: "200px 0",
+          scrollSnapType: isMobile
+            ? "y var(--tw-scroll-snap-strictness)"
+            : "none",
+          height: isMobile ? "100vh" : "auto",
         }}
       >
         <div
           className="fixed top-0 left-0 w-full h-[100vh] z-0"
           ref={testRef}
           onMouseMove={testMove}
+          style={{ display: isMobile ? "none" : "block" }}
         />
         {projects.map((project, index) => (
           <Project
             key={index}
             projectInfo={project}
             test={test}
+            isCurrent={currentProtocol === index}
+            isMobile={isMobile}
             cursorPosition={cursorPosition}
             size={{
               width: isMobile ? "300px" : "40vw",
               height: isMobile ? "200px" : "26.67vw",
               corners: isMobile ? 68 : 116,
-              // width: "40vw",
-              // height: "26.67vw",
-              // corners: 116,
             }}
           />
         ))}

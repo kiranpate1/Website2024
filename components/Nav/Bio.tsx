@@ -7,11 +7,11 @@ import {
   useSpring,
 } from "framer-motion";
 
-type props = {
+type Props = {
   isMobile: boolean;
 };
 
-const Bio = ({ isMobile }: props) => {
+const Bio = ({ isMobile }: Props) => {
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const bioRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const bio =

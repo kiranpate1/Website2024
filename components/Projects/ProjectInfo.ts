@@ -25,7 +25,7 @@ export const Projects = [
     link: "https://torontotechweek2024.com",
   },
   {
-    name: "Workmade vday campaign",
+    name: "Workmade valentines campaign",
     image: "/projects/dtf.png",
     type: ["Design", "Development"],
     color: "#7ADBA7",

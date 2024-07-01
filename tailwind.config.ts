@@ -40,7 +40,6 @@ const config: Config & {
           "font-size": "1.25rem",
           "letter-spacing": "0.08rem",
           "line-height": "110%",
-          "text-transform": "uppercase",
         },
         // sans
         "sans-xl": {
@@ -73,7 +72,6 @@ const config: Config & {
           "font-size": "1.25rem",
           "letter-spacing": "0.08rem",
           "line-height": "110%",
-          "text-transform": "uppercase",
         },
         // sans
         "sans-xl": {
