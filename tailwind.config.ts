@@ -37,13 +37,13 @@ const config: Config & {
         // mono
         "mono-reg": {
           "font-family": "var(--font-pt-mono)",
-          "font-size": "1.25rem",
+          "font-size": "0.8rem",
           "letter-spacing": "0.08rem",
           "line-height": "110%",
         },
         // sans
         "sans-xl": {
-          "font-size": "4rem",
+          "font-size": "2.5rem",
           "letter-spacing": "-0.03rem",
           "line-height": "130%",
         },

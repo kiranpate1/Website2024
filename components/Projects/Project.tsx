@@ -303,7 +303,7 @@ const Project = ({
       </div>
 
       <div className="absolute h-0 w-full bottom-0 left-0 flex items-start justify-center z-0">
-        <div className="relative h-[124px] w-full overflow-hidden pointer-events-none">
+        <div className="relative h-[25vw] w-full overflow-hidden pointer-events-none">
           <motion.div
             className="relative flex justify-center items-center"
             ref={titleRef}
@@ -328,7 +328,10 @@ const Project = ({
               );
             })}
           </motion.div>
-          <div className="absolute bottom-0 w-full flex flex-4 gap-4 font-mono-reg justify-center items-center">
+          <div
+            className="absolute w-full flex flex-4 gap-4 font-mono-reg justify-center items-center"
+            style={{ top: "calc(2vw + 56px)" }}
+          >
             {types.map((type, index) => {
               return (
                 <motion.div

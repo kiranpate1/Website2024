@@ -154,7 +154,7 @@ const Bio = ({ isMobile }: Props) => {
           return (
             <motion.div
               key={index}
-              className="font-sans-lg origin-bottom-left inline-block"
+              className="font-sans-lg origin-bottom-left inline-block text-white"
               style={{
                 fontSize: "calc(1.1px + 4.55vw)",
                 marginLeft: "-0.03vw",

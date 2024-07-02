@@ -8,7 +8,7 @@ type Props = {
 const Tag = ({ type, key }: Props) => {
   return (
     <div className="py-[10px] px-3 rounded-2xl bg-[rgba(255,255,255,0.1)]">
-      <div className="text-sm font-light text-gray-400">{type}</div>
+      <div className="font-mono-reg font-light text-gray-400">{type}</div>
     </div>
   );
 };

@@ -30,7 +30,7 @@ function skewLeave(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 const Socials = ({ isMobile }: props) => {
   return (
     <div
-      className="flex gap-4 absolute pointer-events-auto"
+      className="flex gap-4 absolute pointer-events-auto text-white"
       style={{
         top: isMobile ? "auto" : 0,
         right: isMobile ? "auto" : 0,
