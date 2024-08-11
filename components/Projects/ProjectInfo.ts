@@ -29,7 +29,7 @@ export const Projects = [
     image: "/projects/dtf.png",
     type: ["Design", "Development"],
     color: "#7ADBA7",
-    link: "https://workmade.com",
+    link: "https://downtofile.workmade.com",
   },
   {
     name: "Daybreak website",

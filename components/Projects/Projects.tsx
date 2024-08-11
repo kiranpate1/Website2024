@@ -75,7 +75,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
       transition={{ duration: 0.6, delay: 1, ease: "easeInOut" }}
     >
       <div
-        className="relative flex flex-col h-[100vh] items-center overflow-scroll justify-start"
+        className="relative flex flex-col items-center justify-start"
         ref={boxCont}
         style={{
           gap: isMobile ? "40vw" : "20vw",
