@@ -78,6 +78,7 @@ const ProjectsWrapper = ({ projects }: ProjectsProps) => {
         className="relative flex flex-col items-center justify-start"
         ref={boxCont}
         style={{
+          overflow: isMobile ? "scroll" : "hidden",
           gap: isMobile ? "40vw" : "20vw",
           padding: isMobile ? "100px 0" : "200px 0",
           scrollSnapType: isMobile
