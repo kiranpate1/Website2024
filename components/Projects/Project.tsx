@@ -7,7 +7,6 @@ import Tag from "./Tag";
 // const shouldTrack = true;
 
 type Props = {
-  key: number;
   projectInfo: {
     name: string;
     image: string;
@@ -20,16 +19,17 @@ type Props = {
   test: { x: number };
   cursorPosition: { x: number; y: number };
   size: { width: string; height: string; corners: number };
+  toggleProject: () => void;
 };
 
 const Project = ({
-  key,
   projectInfo,
   test,
   cursorPosition,
   isCurrent,
   isMobile,
   size,
+  toggleProject,
 }: Props) => {
   const [normalizedPosition, setNormalizedPosition] = useState(test);
   const [scaleDown, setScaleDown] = useState(0);
@@ -214,25 +214,37 @@ const Project = ({
 
   return (
     <a
-      className="relative snap-center"
+      className="relative snap-center cursor-pointer"
       style={{
         minWidth: width,
         scrollSnapAlign: isMobile ? "snap-center" : "none",
       }}
-      href={projectInfo.link}
+      // href={projectInfo.link}
       target="_blank"
     >
       <div
-        className="relative w-full overflow-hidden z-[1]"
+        className="relative w-full overflow-hidden z-[1] transition-transform duration-100"
         ref={divRef}
-        style={{ height: height }}
+        style={{
+          height: height,
+          borderRadius: isMobile ? "48px" : "6vw",
+          WebkitBorderRadius: isMobile ? "48px" : "6vw",
+          transform: "translateZ(0)",
+        }}
+        onClick={toggleProject}
         onMouseEnter={boxMove}
         onMouseMove={boxMove}
         onMouseLeave={mainMove}
+        onMouseDown={(event) => {
+          event.currentTarget.style.transform = "scale(0.98)";
+        }}
+        onMouseUp={(event) => {
+          event.currentTarget.style.transform = "scale(1)";
+        }}
       >
-        <Corners color={projectInfo.color} size={size.corners} stroke={2} />
-        <motion.div
-          className="absolute flex flex-col top-0 left-0 w-full h-full origin-top mix-blend-difference"
+        {/* <Corners color={projectInfo.color} size={size.corners} stroke={2} /> */}
+        {/* <motion.div
+          className="absolute flex flex-col top-0 left-0 w-full h-full origin-top"
           style={{
             scaleY: y1,
           }}
@@ -286,7 +298,7 @@ const Project = ({
               </svg>
             </motion.div>
           </div>
-        </motion.div>
+        </motion.div> */}
         <div className="absolute top-0 left-0 w-full h-full z-[-1]">
           <Image
             src={projectInfo.image}
@@ -313,11 +325,11 @@ const Project = ({
               return (
                 <motion.div
                   key={index}
-                  className="font-sans-md origin-bottom-left"
+                  className="font-sans-md origin-bottom-left text-white"
                   style={{
                     transition: "color 0.8s ease",
                     transitionDelay: "0.4s",
-                    color: animateColor,
+                    // color: animateColor,
                     marginLeft: "-0.03%",
                     y: TranslateYSpring(index),
                     skewY: SkewYSpring(index),

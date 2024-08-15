@@ -1,0 +1,93 @@
+.modal {
+  border-radius: 6vw;
+}
+.modal.expand {
+  width: 60vw !important;
+  height: calc(100vh - 64px) !important;
+  left: 20vw !important;
+  top: 32px !important;
+  padding: 2vw !important;
+  border-radius: 4vw;
+}
+
+.modal-close {
+  top: 1.75vw;
+  left: 1.75vw;
+  width: 4vw;
+  height: 4vw;
+  transform: rotate(-180deg);
+  scale: 1;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  transition: 0.8s cubic-bezier(0.64, 1.65, 0.74, 0.88) transform, 0.2s scale,
+    0.2s opacity;
+}
+.expand .modal-close {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+.modal-close:hover {
+  scale: 1.1;
+}
+.modal-close:hover img {
+  filter: invert(1);
+}
+
+.modal-thumbnails {
+  height: 100%;
+}
+.modal.expand .modal-thumbnails {
+  height: 40%;
+}
+
+.modal-thumbnail-0 {
+  filter: blur(50px);
+  opacity: 0.4;
+  transform: scale(0);
+}
+.modal.expand .modal-thumbnail-0 {
+  transform: scale(1.5);
+}
+
+.modal-thumbnail-1 {
+  border-radius: 6vw;
+}
+.modal.expand .modal-thumbnail-1 {
+  border-radius: 2vw;
+}
+
+.modal-info {
+  transition-delay: 0s;
+}
+.modal.expand .modal-info {
+  opacity: 1;
+  transition-delay: 0.3s;
+}
+
+@media screen and (max-width: 768px) {
+  .modal {
+    border-radius: 48px;
+  }
+  .modal.expand {
+    width: calc(100vw - 40px) !important;
+    height: calc(100vh - 40px) !important;
+    left: 20px !important;
+    top: 20px !important;
+    padding: 16px !important;
+    border-radius: 32px;
+  }
+
+  .modal-close {
+    top: 8px;
+    left: 8px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .modal-thumbnail-1 {
+    border-radius: 48px;
+  }
+  .modal.expand .modal-thumbnail-1 {
+    border-radius: 20px;
+  }
+}
