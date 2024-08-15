@@ -1,7 +1,6 @@
 import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
-import Corners from "../Corners/Corners";
 import Tag from "./Tag";
 
 // const shouldTrack = true;
@@ -43,10 +42,6 @@ const Project = ({
   const titleArray = title.split("");
   const types = projectInfo.type;
 
-  // window.onmousemove = (event) => {
-  //   setNormalizedPosition(test);
-  // };
-
   const [letterTransitions, setLetterTransitions] = useState(
     titleArray.map((_letter) => ({
       translateY: 0,
@@ -54,12 +49,6 @@ const Project = ({
     }))
   );
   const [titlePosition, setTitlePosition] = useState(-250);
-
-  // const shit = usePointerPosition(shouldTrack).x;
-  // const xPosition = () => {
-  //   console.log(shit);
-  // };
-  // document.onmouseenter = xPosition;
 
   const calculateLetterPosition = (index: number) => {
     if (!divRef.current || !titleRef.current)
@@ -76,7 +65,7 @@ const Project = ({
 
   function updateLetterTransitions(cursorPos: number) {
     const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return; // Add null check
+    if (!rect) return;
 
     const x = cursorPos - rect.left;
     const width = rect.width;
@@ -113,7 +102,7 @@ const Project = ({
 
   const mainMove = (event: { clientX: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return; // Add null check
+    if (!rect) return;
 
     const x = event.clientX - rect.left;
     const width = rect.width;
@@ -129,7 +118,7 @@ const Project = ({
 
   const boxMove = (event: { clientX: number; clientY: number }) => {
     const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return; // Add null check
+    if (!rect) return;
 
     const x = event.clientX - rect.left;
     const width = rect.width;
@@ -242,8 +231,8 @@ const Project = ({
           event.currentTarget.style.transform = "scale(1)";
         }}
       >
-        {/* <Corners color={projectInfo.color} size={size.corners} stroke={2} /> */}
-        {/* <motion.div
+        {/* <Corners color={projectInfo.color} size={size.corners} stroke={2} />
+        <motion.div
           className="absolute flex flex-col top-0 left-0 w-full h-full origin-top"
           style={{
             scaleY: y1,
