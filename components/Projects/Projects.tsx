@@ -9,7 +9,6 @@ type ProjectsProps = {
 };
 
 const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
-  const navElement = document.querySelector(".nav") as HTMLElement;
   const boxCont = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [test, setTest] = useState({ x: 0 });
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });

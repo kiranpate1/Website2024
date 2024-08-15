@@ -87,5 +87,6 @@ export const Projects = [
     type: ["Artwork"],
     color: "#fff",
     link: "https://instagram.com/artsbykiran",
+    features: ["Instagram"],
   },
 ];
