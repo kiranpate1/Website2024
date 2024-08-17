@@ -16,7 +16,7 @@ export const Projects = [
   {
     name: "Superpower website",
     description:
-      "A platform for creators to share their work, connect with their audience, and get paid for their talent and creativity.",
+      "A modern and innovative website for a digital health clinic, with a focus on telling a compelling story and engaging users.",
     image: "/projects/superpower-new.png",
     type: ["Design", "Development"],
     color: "#75C8FF",
@@ -32,7 +32,7 @@ export const Projects = [
   {
     name: "Toronto Tech Week 2024",
     description:
-      "A week-long event showcasing the best of Toronto's tech scene, featuring industry leaders, workshops, and networking opportunities.",
+      "A website for Toronto Tech Week—showcasing the best of Toronto's tech scene, featuring industry leaders, workshops, and networking opportunities.",
     image: "/projects/ttw.png",
     type: ["Development"],
     color: "#FFEAD7",
@@ -42,7 +42,7 @@ export const Projects = [
   {
     name: "Workmade valentines campaign",
     description:
-      "A digital campaign to celebrate love and creativity, encouraging people to express their affection through art and design.",
+      "A digital campaign to celebrate valentines day and tax season, to promote Workmade's state-of-the-art tax software.",
     image: "/projects/dtf.png",
     type: ["Design", "Development"],
     color: "#7ADBA7",
@@ -72,7 +72,7 @@ export const Projects = [
   {
     name: "Workmade website",
     description:
-      "A platform for creators to share their work, connect with other creatives, and monetize their talent through commissions and collaborations.",
+      "A website for Workmade, a digital agency that helps freelancers file their taxes, manage their finances, and grow their business.",
     image: "/projects/workmade.png",
     type: ["Design", "Development"],
     color: "#fff",
