@@ -121,6 +121,7 @@ const Word = ({ word, divRef }: Props) => {
       {word.split("").map((letter: string, index: number) => {
         return (
           <motion.div
+            key={index}
             className="font-sans-lg origin-bottom-left inline-block text-white"
             style={{
               fontSize: "calc(1.6px + 4.55vw)",

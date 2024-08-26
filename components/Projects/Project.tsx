@@ -108,18 +108,6 @@ const Project = ({
     });
   };
 
-  const scaleSpring = (index: number) =>
-    useSpring(
-      useTransform(
-        motionValue(letterTransitions[index].scale),
-        (latest: number) => Math.sin(latest) * 1.5
-      ),
-      {
-        stiffness: 450,
-        damping: 100,
-      }
-    );
-
   const TranslateYSpring = (index: number) =>
     useSpring(
       useTransform(
