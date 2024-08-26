@@ -1,20 +1,37 @@
 .modal {
-  border-radius: 6vw;
+  border-radius: 96px;
+  will-change: transform, top, left, width, height;
 }
 .modal.expand {
   width: 60vw !important;
-  height: calc(100vh - 64px) !important;
+  max-width: 800px !important;
+  height: 90vh !important;
+  max-height: 800px !important;
   left: 20vw !important;
-  top: 32px !important;
-  padding: 2vw !important;
-  border-radius: 4vw;
+  top: 5vh !important;
+  /* transform: translate(-50%, -50%) !important; */
+  padding: 32px !important;
+  border-radius: 64px;
+}
+
+@media screen and (min-width: 1333px) {
+  .modal.expand {
+    width: 800px !important;
+    left: calc(50% - 400px) !important;
+  }
+}
+@media screen and (min-height: 889px) {
+  .modal.expand {
+    height: 800px !important;
+    top: calc(50% - 400px) !important;
+  }
 }
 
 .modal-close {
-  top: 1.75vw;
-  left: 1.75vw;
-  width: 4vw;
-  height: 4vw;
+  top: 24px;
+  left: 24px;
+  width: 72px;
+  height: 72px;
   transform: rotate(-180deg);
   scale: 1;
   -webkit-backdrop-filter: blur(16px);
@@ -50,10 +67,10 @@
 }
 
 .modal-thumbnail-1 {
-  border-radius: 6vw;
+  border-radius: 96px;
 }
 .modal.expand .modal-thumbnail-1 {
-  border-radius: 2vw;
+  border-radius: 32px;
 }
 
 .modal-info {
@@ -70,9 +87,12 @@
   }
   .modal.expand {
     width: calc(100vw - 40px) !important;
+    max-width: none !important;
     height: calc(100vh - 40px) !important;
+    max-height: none !important;
     left: 20px !important;
     top: 20px !important;
+    transform: translate(0%, 0%) !important;
     padding: 16px !important;
     border-radius: 32px;
   }

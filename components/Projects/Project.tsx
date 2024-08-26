@@ -13,67 +13,57 @@ type Props = {
     color?: string;
     link?: string;
   };
+  scrollPos: number;
   isCurrent?: boolean;
   isMobile: boolean;
-  test: { x: number };
-  cursorPosition: { x: number; y: number };
   size: { width: string; height: string; corners: number };
   toggleProject: () => void;
 };
 
 const Project = ({
   projectInfo,
-  test,
-  cursorPosition,
+  scrollPos,
   isCurrent,
   isMobile,
   size,
   toggleProject,
 }: Props) => {
-  const [normalizedPosition, setNormalizedPosition] = useState(test);
   const [scaleDown, setScaleDown] = useState(0);
-  const [animateColor, setAnimateColor] = useState(projectInfo.color);
   const divRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const titleRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const width = size.width;
-  const svgWidth = Number(width.slice(0, -2)) / 1.2;
   const height = size.height;
   const title = projectInfo.name;
   const titleArray = title.split("");
   const types = projectInfo.type;
 
+  useEffect(() => {
+    updateLetterTransitions(scrollPos);
+  }, [scrollPos]);
+
   const [letterTransitions, setLetterTransitions] = useState(
     titleArray.map((_letter) => ({
+      scale: 2 / 3,
       translateY: 0,
       skewY: 0,
     }))
   );
-  const [titlePosition, setTitlePosition] = useState(-250);
 
   const calculateLetterPosition = (index: number) => {
-    if (!divRef.current || !titleRef.current)
-      return { letter: "", position: { xRatio: 0 } };
-    const divRect = divRef.current.getBoundingClientRect();
+    if (!titleRef.current) return { letter: "", position: { xRatio: 0 } };
     const letterElement = titleRef.current.children[index];
     if (!letterElement) return { letter: "", position: { xRatio: 0 } };
     const letterRect = letterElement.getBoundingClientRect();
     const letterLeft = letterRect.left;
-    const x = letterLeft - divRect.left;
-    const xRatio = x / divRect.width;
+    const x = letterLeft;
+    const xRatio = x / window.innerWidth;
     return { letter: titleArray[index], position: { xRatio } };
   };
 
   function updateLetterTransitions(cursorPos: number) {
-    const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = cursorPos - rect.left;
-    const width = rect.width;
+    const x = cursorPos;
+    const width = window.innerWidth;
     const xDivRatio = x / width;
-
-    setNormalizedPosition({
-      x: x / width,
-    });
 
     setLetterTransitions((prev) => {
       return prev.map((_item, i) => {
@@ -86,9 +76,11 @@ const Project = ({
             : 0;
         const skewDist =
           xLetterRatio !== undefined ? xDivRatio - xLetterRatio : 0;
+        const scale = 1 + translateDist * Math.PI * 1.5 - Math.PI;
         const translateY = translateDist * Math.PI * 1.5 - Math.PI;
         const skewY = -skewDist * Math.PI * 1.5 + Math.PI;
         return {
+          scale,
           translateY,
           skewY,
         };
@@ -96,46 +88,19 @@ const Project = ({
     });
   }
 
-  useEffect(() => {
-    updateLetterTransitions(cursorPosition.x);
-  }, [test]);
-
-  const mainMove = (event: { clientX: number }) => {
-    const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = event.clientX - rect.left;
-    const width = rect.width;
-
+  const mainMove = () => {
     setScaleDown(0);
 
-    setTitlePosition(-250);
-
-    setAnimateColor(projectInfo.color);
-
-    updateLetterTransitions(event.clientX);
+    updateLetterTransitions(scrollPos);
   };
 
-  const boxMove = (event: { clientX: number; clientY: number }) => {
-    const rect = divRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = event.clientX - rect.left;
-    const width = rect.width;
-
-    setNormalizedPosition({
-      x: x / width,
-    });
-
+  const boxMove = () => {
     setScaleDown(1);
-
-    setTitlePosition(-135);
-
-    setAnimateColor("#fff");
 
     setLetterTransitions((prev) => {
       return prev.map((_item) => {
         return {
+          scale: 2 / 3,
           translateY: 1,
           skewY: 0,
         };
@@ -143,39 +108,17 @@ const Project = ({
     });
   };
 
-  const scaleY1 = useTransform(
-    motionValue(scaleDown),
-    (latest: number) => latest * 1
-  );
-  const scaleX1 = useTransform(
-    motionValue(normalizedPosition.x),
-    (latest: number) => latest * 2
-  );
-  const scaleX2 = useTransform(
-    motionValue(normalizedPosition.x),
-    (latest: number) => 2 - latest * 2
-  );
-  const titleY1 = useTransform(
-    motionValue(titlePosition),
-    (latest: number) => latest
-  );
-
-  const y1 = useSpring(scaleY1, {
-    stiffness: 300,
-    damping: 50,
-  });
-  const x1 = useSpring(scaleX1, {
-    stiffness: 400,
-    damping: 100,
-  });
-  const x2 = useSpring(scaleX2, {
-    stiffness: 400,
-    damping: 100,
-  });
-  const titleY = useSpring(titleY1, {
-    stiffness: 400,
-    damping: 100,
-  });
+  const scaleSpring = (index: number) =>
+    useSpring(
+      useTransform(
+        motionValue(letterTransitions[index].scale),
+        (latest: number) => Math.sin(latest) * 1.5
+      ),
+      {
+        stiffness: 450,
+        damping: 100,
+      }
+    );
 
   const TranslateYSpring = (index: number) =>
     useSpring(
@@ -193,7 +136,7 @@ const Project = ({
     useSpring(
       useTransform(
         motionValue(letterTransitions[index].skewY),
-        (latest: number) => Math.sin(latest) * 60
+        (latest: number) => Math.sin(latest) * 30
       ),
       {
         stiffness: 450,
@@ -203,7 +146,7 @@ const Project = ({
 
   return (
     <a
-      className="relative snap-center cursor-pointer"
+      className="test1 relative snap-center cursor-pointer z-[2]"
       style={{
         minWidth: width,
         scrollSnapAlign: isMobile ? "snap-center" : "none",
@@ -216,12 +159,11 @@ const Project = ({
         ref={divRef}
         style={{
           height: height,
-          borderRadius: isMobile ? "48px" : "6vw",
-          WebkitBorderRadius: isMobile ? "48px" : "6vw",
+          borderRadius: isMobile ? "48px" : "96px",
+          WebkitBorderRadius: isMobile ? "48px" : "96px",
           transform: "translateZ(0)",
         }}
         onClick={toggleProject}
-        onMouseEnter={boxMove}
         onMouseMove={boxMove}
         onMouseLeave={mainMove}
         onMouseDown={(event) => {
@@ -231,63 +173,6 @@ const Project = ({
           event.currentTarget.style.transform = "scale(1)";
         }}
       >
-        {/* <Corners color={projectInfo.color} size={size.corners} stroke={2} />
-        <motion.div
-          className="absolute flex flex-col top-0 left-0 w-full h-full origin-top"
-          style={{
-            scaleY: y1,
-          }}
-        >
-          <div
-            className="w-full origin-top"
-            style={{
-              minHeight: height,
-              background: "#fff",
-            }}
-          />
-          <div className="flex origin-top items-center justify-center">
-            <motion.div
-              className="scale-x-[-1] origin-top-left"
-              style={{
-                minWidth: svgWidth + width.slice(-2),
-                scaleX: x1,
-                // scaleY: y1,
-              }}
-            >
-              <svg
-                className="w-full min-w-full"
-                viewBox="0 0 383 108"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0 80C180.5 -114.5 258 107.5 383 107.5V0H0V80Z"
-                  fill={"#fff"}
-                />
-              </svg>
-            </motion.div>
-            <motion.div
-              className="origin-top-right"
-              style={{
-                minWidth: svgWidth + width.slice(-2),
-                scaleX: x2,
-                // scaleY: y1,
-              }}
-            >
-              <svg
-                className="w-full min-w-full"
-                viewBox="0 0 383 108"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M383 80C202.5 -114.5 125 107.5 0 107.5V0H383V80Z"
-                  fill={"#fff"}
-                />
-              </svg>
-            </motion.div>
-          </div>
-        </motion.div> */}
         <div className="absolute top-0 left-0 w-full h-full z-[-1]">
           <Image
             src={projectInfo.image}
@@ -296,10 +181,6 @@ const Project = ({
             height={200}
             className="w-full h-full object-cover"
           />
-          {/* <div
-            className="absolute top-0 left-0 w-full h-full mix-blend-difference"
-            style={{ background: projectInfo.color }}
-          /> */}
         </div>
       </div>
 
@@ -308,7 +189,7 @@ const Project = ({
           <motion.div
             className="relative flex justify-center items-center"
             ref={titleRef}
-            style={{ y: titleY }}
+            style={{ y: "-135px" }}
           >
             {titleArray.map((letter, index) => {
               return (
@@ -318,8 +199,8 @@ const Project = ({
                   style={{
                     transition: "color 0.8s ease",
                     transitionDelay: "0.4s",
-                    // color: animateColor,
                     marginLeft: "-0.03%",
+                    // scaleY: scaleSpring(index),
                     y: TranslateYSpring(index),
                     skewY: SkewYSpring(index),
                   }}
@@ -339,15 +220,15 @@ const Project = ({
                   key={index}
                   initial={{
                     opacity: 0,
-                    transform: "scale(0.8)",
-                    // filter: "blur(20px)"
+                    transform: "scale(0.5)",
+                    filter: "blur(50px)",
                   }}
                   animate={{
                     opacity: scaleDown == 0 ? 0 : 1,
-                    transform: scaleDown == 0 ? "scale(0.8)" : "scale(1)",
-                    // filter: scaleDown == 0 ? "blur(20px)" : "blur(0px)",
+                    transform: scaleDown == 0 ? "scale(0.5)" : "scale(1)",
+                    filter: scaleDown == 0 ? "blur(50px)" : "blur(0px)",
                   }}
-                  transition={{ duration: 0.3, delay: 0.2 + 0.2 * index }}
+                  transition={{ duration: 0.2, delay: 0.1 + 0.1 * index }}
                 >
                   <Tag key={index} type={type} />
                 </motion.div>

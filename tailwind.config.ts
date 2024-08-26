@@ -85,7 +85,7 @@ const config: Config & {
           "line-height": "110%",
         },
         "sans-md": {
-          "font-size": "2.5vw",
+          "font-size": "2rem",
           "letter-spacing": "-0.03rem",
           "line-height": "110%",
         },

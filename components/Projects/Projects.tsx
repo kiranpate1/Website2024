@@ -2,6 +2,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Project from "./Project";
 import { motion, useMotionValueEvent } from "framer-motion";
 import { Projects } from "./ProjectInfo";
+import { e } from "mathjs";
 
 type ProjectsProps = {
   expanded: MutableRefObject<HTMLDivElement | null>;
@@ -9,16 +10,13 @@ type ProjectsProps = {
 };
 
 const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
+  const [cursorPosition, setCursorPosition] = useState(0);
   const boxCont = useRef() as MutableRefObject<HTMLDivElement | null>;
-  const [test, setTest] = useState({ x: 0 });
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const mouse = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [width, setWidth] = useState<number>(0);
   const [currentProtocol, setCurrentProtocol] = useState(0);
 
   useEffect(() => {
-    window.onmousemove = (event) => {
-      setCursorPosition({ x: event.clientX, y: event.clientY });
-    };
     setWidth(window.innerWidth);
 
     function handleWindowSizeChange() {
@@ -30,15 +28,29 @@ const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
     };
   }, []);
 
-  const isMobile = width <= 768;
+  function yeah(event: React.UIEvent<HTMLDivElement>) {
+    const wheelEvent = e as unknown as WheelEvent;
+    boxCont.current?.scrollBy(wheelEvent.deltaY, 0);
+  }
 
-  const testMove = (event: { clientX: number; clientY: number }) => {
-    setTest({ x: event.clientX });
-  };
+  function scroll() {
+    var div = boxCont.current;
+    if (!div) return;
+
+    var scrollLeft = div.scrollLeft;
+    var scrollWidth = div.scrollWidth;
+    var clientWidth = div.clientWidth;
+    var scrollPercentage =
+      scrollLeft / (scrollWidth - clientWidth) + window.innerWidth / 2;
+
+    setCursorPosition(scrollPercentage);
+  }
+
+  const isMobile = width <= 768;
 
   function expand(index: number) {
     setCurrentProtocol(index);
-    const element = boxCont.current?.children[index + 1] as HTMLElement;
+    const element = boxCont.current?.children[index] as HTMLElement;
     if (!element) return;
     element.style.opacity = "0";
     var rect = element.getBoundingClientRect();
@@ -49,10 +61,13 @@ const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
       const expProj = expCont.children[index] as HTMLElement;
       const expClose = expProj.children[0] as HTMLElement;
       expProj.style.display = "flex";
+      expProj.style.width = `${rect.width}px`;
+      expProj.style.maxWidth = `${rect.width}px`;
+      expProj.style.height = `${rect.height}px`;
+      expProj.style.maxHeight = `${rect.height}px`;
+      // expProj.style.transform = `translate(0%,0%)`;
       expProj.style.left = `${rect.left}px`;
       expProj.style.top = `${rect.top}px`;
-      expProj.style.width = `${rect.width}px`;
-      expProj.style.height = `${rect.height}px`;
       expProj.style.padding = "0";
 
       if (home.current) {
@@ -81,6 +96,8 @@ const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
           document.body.style.overflow = "auto";
           element.style.opacity = "1";
         }, 300);
+
+        // setCursorPosition(0);
       };
     }
   }
@@ -92,35 +109,37 @@ const ProjectsWrapper = ({ expanded, home }: ProjectsProps) => {
       transition={{ duration: 0.6, delay: 1, ease: "easeInOut" }}
     >
       <div
-        className="relative flex flex-row h-screen items-center justify-start overflow-y-hidden overflow-x-scroll duration-200"
+        className="relative flex flex-row h-screen items-center justify-start duration-200"
         ref={boxCont}
+        onWheel={(e) => {
+          yeah(e);
+        }}
+        onScroll={scroll}
         style={{
           overflowY: isMobile ? "scroll" : "hidden",
           overflowX: isMobile ? "hidden" : "scroll",
           flexDirection: isMobile ? "column" : "row",
-          gap: isMobile ? "40vw" : "10vw",
+          gap: isMobile ? "40vw" : "15vw",
           padding: isMobile ? "100px 0" : "0 20vw",
           scrollSnapType: isMobile
             ? "y var(--tw-scroll-snap-strictness)"
             : "none",
         }}
       >
-        <div
-          className="fixed top-0 left-0 h-[100vh] z-0"
-          onMouseMove={testMove}
-          style={{ display: isMobile ? "none" : "block" }}
-        />
+        {/* <div
+          className="absolute top-0 left-0 w-[600%] h-screen"
+          onMouseMove={mouseMove}
+        /> */}
         {Projects.map((project, index) => (
           <Project
             key={index}
             projectInfo={project}
-            test={test}
+            scrollPos={cursorPosition}
             isCurrent={currentProtocol === index}
             isMobile={isMobile}
-            cursorPosition={cursorPosition}
             size={{
-              width: isMobile ? "300px" : "40vw",
-              height: isMobile ? "200px" : "26.67vw",
+              width: isMobile ? "300px" : "600px",
+              height: isMobile ? "200px" : "400px",
               corners: isMobile ? 68 : 116,
             }}
             toggleProject={() => expand(index)}
