@@ -1,0 +1,11 @@
+@media screen and (max-width: 768px) {
+  .letter {
+    transform: translateY(160px) !important;
+  }
+
+  .tag {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    filter: blur(0px) !important;
+  }
+}

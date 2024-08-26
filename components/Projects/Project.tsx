@@ -2,8 +2,7 @@ import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useTransform, motionValue, useSpring } from "framer-motion";
 import Tag from "./Tag";
-
-// const shouldTrack = true;
+import "./style.css";
 
 type Props = {
   projectInfo: {
@@ -183,12 +182,11 @@ const Project = ({
               return (
                 <motion.div
                   key={index}
-                  className="font-sans-md origin-bottom-left text-white"
+                  className="letter font-sans-md origin-bottom-left text-white"
                   style={{
                     transition: "color 0.8s ease",
                     transitionDelay: "0.4s",
                     marginLeft: "-0.03%",
-                    // scaleY: scaleSpring(index),
                     y: TranslateYSpring(index),
                     skewY: SkewYSpring(index),
                   }}
@@ -205,6 +203,7 @@ const Project = ({
             {types.map((type, index) => {
               return (
                 <motion.div
+                  className="tag"
                   key={index}
                   initial={{
                     opacity: 0,
