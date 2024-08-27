@@ -1,6 +1,7 @@
 .modal {
   border-radius: 96px;
   will-change: transform, top, left, width, height;
+  -webkit-will-change: transform, top, left, width, height;
 }
 .modal.expand {
   width: 60vw !important;

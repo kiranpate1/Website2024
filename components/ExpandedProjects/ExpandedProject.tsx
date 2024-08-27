@@ -20,7 +20,7 @@ const ExpandedProject = ({ projectInfo }: Props) => {
       className="modal absolute flex-col gap-8 items-stretch hidden overflow-hidden duration-[300ms] ease-out border-white bg-[#2F2F2F]"
       // style={{ background: projectInfo.color }}
     >
-      <div className="modal-close flex items-center justify-center absolute rounded-full z-10 bg-[rgba(47,47,47,0.2)] opacity-0 cursor-pointer hover:bg-white">
+      <div className="modal-close flex items-center justify-center absolute rounded-full z-10 bg-[rgba(47,47,47,0.7)] opacity-0 cursor-pointer hover:bg-white">
         <img src="/icons/back.svg" />
       </div>
       <div className="flex justify-center items-center modal-thumbnails w-full relative duration-[300ms] pointer-events-none z-[1]">
