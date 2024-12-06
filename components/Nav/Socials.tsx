@@ -8,7 +8,7 @@ type props = {
 const socialInfo = [
   { name: "TW", link: "https://twitter.com/pate1kiran" },
   { name: "IG", link: "https://www.instagram.com/artsbykiran/" },
-  { name: "LI", link: "https://www.linkedin.com/in/ka-patel/" },
+  { name: "CV", link: "https://read.cv/kiranpatel" },
 ];
 
 function skew(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
