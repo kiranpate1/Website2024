@@ -24,14 +24,14 @@ const ExpandedProject = ({ projectInfo }: Props) => {
         <img src="/icons/back.svg" />
       </div>
       <div className="flex justify-center items-center modal-thumbnails w-full relative duration-[300ms] pointer-events-none z-[1]">
-        <Image
+        <img
           src={projectInfo.image}
           alt=""
           width={200}
           height={200}
           className="modal-thumbnail-0 absolute top-0 left-0 w-full h-full object-cover duration-[300ms] z-[1]"
         />
-        <Image
+        <img
           src={projectInfo.image}
           alt="expanded thumbnail"
           width={200}
