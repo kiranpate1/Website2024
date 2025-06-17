@@ -14,6 +14,37 @@ export type ProjectInfo = {
 
 export const Projects = [
   {
+    name: "Dropbox Brand Site",
+    description:
+      "An digital playground for Dropbox, showcasing their identity and overall brand experience.",
+    image: "/projects/dropbox.png",
+    type: ["Design", "Development"],
+    color: "#75C8FF",
+    link: "https://brand.dropbox.com",
+    features: [
+      "Awwwards Site of the Month",
+      "Awwwards Site of the Day",
+      "Awwwards Developer Award",
+      "CSS Design Awards Site of the Month",
+      "CSS Design Awards Site of the Day",
+      "Webby: Best User Experience",
+      "Webby: Best Responsive/Adaptive Design for Mobile",
+      "Webby: Best Responsive/Adaptive Design for Mobile",
+      "Development lead",
+      "Design support",
+    ],
+  },
+  {
+    name: "TTW Teaser Site",
+    description:
+      "A brand new refresh for Toronto's biggest celebration of tech, innovation, and networking.",
+    image: "/projects/ttw-teaser.png",
+    type: ["Design", "Development"],
+    color: "#75C8FF",
+    link: "https://toronto-tech-week.webflow.io/",
+    features: ["Lone developer", "Design support"],
+  },
+  {
     name: "Superpower website",
     description:
       "A modern and innovative website for a digital health clinic, with a focus on telling a compelling story and engaging users.",
@@ -22,7 +53,8 @@ export const Projects = [
     color: "#75C8FF",
     link: "https://superpower.com",
     features: [
-      "Awwwards SOTD",
+      "Awwwards Site of the Month",
+      "Awwwards Site of the Day",
       "Awwwards Developer Award",
       "Awwwards Honorable Mention",
       "Design lead",
